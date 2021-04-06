@@ -1,0 +1,16 @@
+package com.hust.medtech.data.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class TransactionMedicalDTO {
+    private Integer transId;
+    private Data createDate;
+    private AccountDTO account;
+}

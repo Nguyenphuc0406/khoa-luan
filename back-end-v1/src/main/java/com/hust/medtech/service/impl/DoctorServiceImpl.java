@@ -1,0 +1,78 @@
+package com.hust.medtech.service.impl;
+
+import com.hust.medtech.base.response.BadResponse;
+import com.hust.medtech.base.response.BaseResponse;
+import com.hust.medtech.base.response.OkResponse;
+import com.hust.medtech.config.MsgRespone;
+import com.hust.medtech.data.dto.DoctorDTO;
+import com.hust.medtech.data.entity.Account;
+import com.hust.medtech.data.entity.Doctor;
+import com.hust.medtech.repository.AccountRepository;
+import com.hust.medtech.repository.DoctorRepository;
+import com.hust.medtech.service.DoctorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class DoctorServiceImpl implements DoctorService {
+
+    @Autowired
+    DoctorRepository doctorRepository;
+
+    @Autowired
+    AccountRepository accountRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Override
+    public BaseResponse addDoctor(DoctorDTO doctorDTO) {
+
+        if (doctorDTO != null && doctorDTO.getAccount() != null) {
+            Account accountCheck = accountRepository.findByUsername(doctorDTO.getAccount().getUsername());
+            if (accountCheck == null) {
+
+                Account account = Account.builder()
+                        .username(doctorDTO.getAccount().getUsername())
+                        .password(passwordEncoder.encode(doctorDTO.getAccount().getPassword()))
+                        .fullName(doctorDTO.getAccount().getFullName())
+                        .DOB(doctorDTO.getAccount().getDOB())
+                        .job(doctorDTO.getAccount().getJob())
+                        .nationality(doctorDTO.getAccount().getNationality())
+                        .phoneNumber(doctorDTO.getAccount().getPhoneNumber())
+                        .identityCard(doctorDTO.getAccount().getIdentityCard())
+                        .role(doctorDTO.getAccount().getRole()).build();
+
+                Doctor doctor = Doctor.builder()
+                        .room(doctorDTO.getRoom())
+                        .account(account).build();
+                accountRepository.save(account);
+                doctorRepository.save(doctor);
+                return new OkResponse(MsgRespone.DOCTOR_ADD_SUCCESS);
+            } else {
+                return new BadResponse(MsgRespone.GLOBAL_TRUNG_DU_LIEU);
+            }
+
+        } else {
+            return new BadResponse(MsgRespone.DOCTOR_INPUT_INVALID);
+
+        }
+
+    }
+
+    @Override
+    public BaseResponse getAllDoctor() {
+        return null;
+    }
+
+    @Override
+    public BaseResponse getDoctorById(int doctorId) {
+        return null;
+    }
+
+    @Override
+    public BaseResponse deleteDoctor(int doctorId) {
+        return null;
+    }
+}
