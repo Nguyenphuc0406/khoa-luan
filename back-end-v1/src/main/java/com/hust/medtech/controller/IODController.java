@@ -20,7 +20,7 @@ public class IODController {
 
     @PostMapping(path = ConfigUrl.URL_GET_IOD_BY_DEPT)
     public BaseResponse getIodByDept(@RequestBody DeptIdRequest request) {
-        return iodService.getAllIodByDeptId(request);
+        return iodService.getAllIodByDeptIdWithHospital(request);
     }
 
     @GetMapping(path = ConfigUrl.URL_ITEM_OF_DEPT + "/{id}")

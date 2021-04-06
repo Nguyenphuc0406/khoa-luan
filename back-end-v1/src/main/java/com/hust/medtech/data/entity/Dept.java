@@ -1,5 +1,6 @@
 package com.hust.medtech.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +34,7 @@ public class Dept {
 
     @Column(name = "DESCRIPTION")
     private String description;
-
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "HOSPITAL_ID")
     private Hospital hospital;

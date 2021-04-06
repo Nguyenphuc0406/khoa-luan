@@ -32,4 +32,8 @@ public interface MsgRespone {
     String IOD_ADD_ERROR = "Add ItemOfDept error";
     String IOD_INPUT_INVALID = "ItemOfDept input invalid";
     String IOD_NOT_FOUND = "ItemOfDept not found!";
+
+    //trans medical
+    String TAO_PHIEU_KHAM_THANH_CONG = "Tao phieu kham thanh cong";
+    String TAO_PHIEU_KHAM_THAT_BAI = "Tao phieu kham that bai";
 }

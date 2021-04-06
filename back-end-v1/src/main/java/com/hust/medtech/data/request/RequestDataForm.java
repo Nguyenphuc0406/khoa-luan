@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestDataForm {
-//    private int username;
+    //    private int username;
 //    private int age;
     private List<Integer> iodId;
     private String description;

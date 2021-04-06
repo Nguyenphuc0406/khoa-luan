@@ -12,6 +12,8 @@ import com.hust.medtech.service.HospitalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class HospitalServiceImpl implements HospitalService {
     @Autowired
@@ -38,13 +40,19 @@ public class HospitalServiceImpl implements HospitalService {
     }
 
     @Override
-    public BaseResponse getAllHospital() {
-        return null;
+    public List<Hospital> getAllHospital() {
+        return hospitalRepository.findAll();
     }
 
     @Override
     public BaseResponse getHospitalById(int hospitalId) {
-        return null;
+        Hospital hospitalCheck = hospitalRepository.findByHospitalId(hospitalId);
+        if (hospitalCheck != null) {
+            return new OkResponse(hospitalCheck);
+        } else {
+            return new NotFoundResponse(MsgRespone.HOSPITAL_INPUT_INVALID);
+        }
+
     }
 
     @Override

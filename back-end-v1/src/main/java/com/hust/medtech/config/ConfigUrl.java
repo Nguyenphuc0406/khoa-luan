@@ -21,4 +21,8 @@ public interface ConfigUrl {
     String URL_ITEM_OF_DEPT = URL_API + "/item-of-dept";
     String URL_GET_IOD_BY_DEPT = URL_ITEM_OF_DEPT + "/get-by-dept";
 
+    // phieu kham banh
+    String URL_PHIEU_KHAM = URL_API + "/phieu-kham";
+//    String URL_GET_IOD_BY_DEPT =  + "/get-by-dept";
+
 }

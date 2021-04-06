@@ -14,6 +14,6 @@ import java.io.Serializable;
 @Builder
 @Embeddable
 public class TransactionMedicalDetailID implements Serializable {
-    private int tracsactionId;
-    private int iodId;
+    private int transactionId;
+    private int itemOfDeptId;
 }
