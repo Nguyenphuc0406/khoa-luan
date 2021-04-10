@@ -64,8 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements A
 //        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/patient").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/doctor").permitAll();
         /*   http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/product/**").permitAll();*/
-        http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/phieu-kham").access("hasRole('USER')");
+//        http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/**").permitAll();
 //        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/patient").access("hasRole('USER')");
 
         http.authorizeRequests().anyRequest().authenticated(); // Tất cả các request khác đều cần phải xác thực mới được

@@ -12,7 +12,7 @@ import java.util.List;
 public class TransactionMedicalDTO {
     private Integer transId;
     private Date createDate;
-    private AccountDTO account;
+//    private AccountDTO account;
 
     private List<Integer> itemOfDepts = new ArrayList<>();
 //    private List<TransactionMedicalDetailDTO> transMedDetails;
@@ -20,10 +20,9 @@ public class TransactionMedicalDTO {
     public TransactionMedicalDTO() {
     }
 
-    public TransactionMedicalDTO(Integer transId, Date createDate, AccountDTO account, List<Integer> itemOfDepts) {
+    public TransactionMedicalDTO(Integer transId, Date createDate, List<Integer> itemOfDepts) {
         this.transId = transId;
         this.createDate = createDate;
-        this.account = account;
         this.itemOfDepts = itemOfDepts;
     }
 
@@ -41,14 +40,6 @@ public class TransactionMedicalDTO {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-    public AccountDTO getAccount() {
-        return account;
-    }
-
-    public void setAccount(AccountDTO account) {
-        this.account = account;
     }
 
     public List<Integer> getItemOfDepts() {

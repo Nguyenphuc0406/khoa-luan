@@ -6,10 +6,7 @@ import com.hust.medtech.data.dto.TransactionMedicalDTO;
 import com.hust.medtech.service.TransactionMedicalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class TransMedcalController {
@@ -17,8 +14,8 @@ public class TransMedcalController {
     TransactionMedicalService transMedService;
 
     @PostMapping(path = ConfigUrl.URL_PHIEU_KHAM)
-    public BaseResponse addTransMed(@RequestBody TransactionMedicalDTO transactionMedicalDTO) {
-        return transMedService.addTransMedical(transactionMedicalDTO);
+    public BaseResponse addTransMed(@RequestBody TransactionMedicalDTO transactionMedicalDTO, @RequestHeader("accept-token") String token) {
+        return transMedService.addTransMedical(transactionMedicalDTO, token);
     }
 
 }

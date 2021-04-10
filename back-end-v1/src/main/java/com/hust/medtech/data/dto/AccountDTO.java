@@ -40,4 +40,6 @@ public class AccountDTO {
     private String identityCard;
 
     private String role;
+
+    private String code;
 }
