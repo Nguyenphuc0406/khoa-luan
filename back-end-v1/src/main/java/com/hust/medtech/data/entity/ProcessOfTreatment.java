@@ -16,12 +16,15 @@ import java.time.LocalDateTime;
 @Table(name = "process_of_treatment")
 public class ProcessOfTreatment {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "POT_ID")
     private int potId;
 
     @Column(name = "DATE_OF_EXAMINATION")
     private LocalDateTime dateOfExamination;
+
+    @Column(name = "DESCRIPTION")
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "PATIENT_ID")

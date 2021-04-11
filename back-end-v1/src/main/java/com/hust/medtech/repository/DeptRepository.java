@@ -1,7 +1,7 @@
 package com.hust.medtech.repository;
 
 import com.hust.medtech.data.entity.Dept;
-import com.hust.medtech.data.entity.Hospital;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

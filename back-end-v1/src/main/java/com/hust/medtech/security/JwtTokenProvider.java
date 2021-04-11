@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+
 @Component
 @Slf4j
 public class JwtTokenProvider {
@@ -31,9 +32,14 @@ public class JwtTokenProvider {
 
     // Lấy thông tin user từ jwt
     public String getUserNameFromJWT(String token) {
-        Claims claims = Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody();
+        try {
+            Claims claims = Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody();
+            return String.valueOf(claims.getSubject());
+        } catch (ExpiredJwtException e) {
 
-        return String.valueOf(claims.getSubject());
+        }
+        return null;
+
     }
 
     public boolean validateToken(String authToken) {
@@ -47,6 +53,8 @@ public class JwtTokenProvider {
         } catch (UnsupportedJwtException ex) {
 
         } catch (IllegalArgumentException ex) {
+
+        } catch (SignatureException e) {
 
         }
         return false;

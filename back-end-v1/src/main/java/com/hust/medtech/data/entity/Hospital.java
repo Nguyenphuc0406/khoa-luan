@@ -1,3 +1,4 @@
+/*
 package com.hust.medtech.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -34,3 +35,4 @@ public class Hospital {
     @OneToMany(mappedBy = "hospital", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Dept> depts = new ArrayList<>();
 }
+*/

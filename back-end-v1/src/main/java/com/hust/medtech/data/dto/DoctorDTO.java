@@ -16,5 +16,9 @@ public class DoctorDTO {
 
     private String room;
 
+    private int active;
+
     private AccountDTO account;
+
+    private DeptDTO dept;
 }

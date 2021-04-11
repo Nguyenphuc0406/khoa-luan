@@ -34,12 +34,15 @@ public class Dept {
 
     @Column(name = "DESCRIPTION")
     private String description;
-    @JsonIgnore
+/*    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "HOSPITAL_ID")
-    private Hospital hospital;
+    private Hospital hospital;*/
 //    @JsonManagedReference
     @OneToMany(mappedBy = "dept", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ItemOfDept> itemOfDepts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "deptDoctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Doctor> doctors = new ArrayList<>();
 
 }

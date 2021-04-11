@@ -1,3 +1,4 @@
+/*
 package com.hust.medtech.controller;
 
 import com.hust.medtech.base.response.BaseResponse;
@@ -22,3 +23,4 @@ public class HospitalController {
         return hospitalService.getHospitalById(hospitalId);
     }
 }
+*/

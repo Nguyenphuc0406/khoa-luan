@@ -1,3 +1,4 @@
+/*
 package com.hust.medtech.service.impl;
 
 import com.hust.medtech.base.response.BadResponse;
@@ -60,3 +61,4 @@ public class HospitalServiceImpl implements HospitalService {
         return null;
     }
 }
+*/

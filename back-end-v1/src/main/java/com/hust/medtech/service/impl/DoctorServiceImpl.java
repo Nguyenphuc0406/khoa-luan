@@ -6,13 +6,17 @@ import com.hust.medtech.base.response.OkResponse;
 import com.hust.medtech.config.MsgRespone;
 import com.hust.medtech.data.dto.DoctorDTO;
 import com.hust.medtech.data.entity.Account;
+import com.hust.medtech.data.entity.Dept;
 import com.hust.medtech.data.entity.Doctor;
 import com.hust.medtech.repository.AccountRepository;
+import com.hust.medtech.repository.DeptRepository;
 import com.hust.medtech.repository.DoctorRepository;
 import com.hust.medtech.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
@@ -22,6 +26,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    DeptRepository deptRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -42,11 +49,17 @@ public class DoctorServiceImpl implements DoctorService {
                         .nationality(doctorDTO.getAccount().getNationality())
                         .phoneNumber(doctorDTO.getAccount().getPhoneNumber())
                         .identityCard(doctorDTO.getAccount().getIdentityCard())
-                        .role(doctorDTO.getAccount().getRole()).build();
+                        .role(doctorDTO.getAccount().getRole())
+                        .code(doctorDTO.getAccount().getCode()).build();
+
+                Dept dept =Dept.builder()
+                        .deptId(doctorDTO.getDept().getDeptId()).build();
 
                 Doctor doctor = Doctor.builder()
                         .room(doctorDTO.getRoom())
-                        .account(account).build();
+                        .active(doctorDTO.getActive())
+                        .account(account)
+                        .deptDoctor(dept).build();
                 accountRepository.save(account);
                 doctorRepository.save(doctor);
                 return new OkResponse(MsgRespone.DOCTOR_ADD_SUCCESS);
@@ -73,6 +86,22 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public BaseResponse deleteDoctor(int doctorId) {
+        return null;
+    }
+
+    @Override
+    public BaseResponse getDoctorByDept(int deptId) {
+        if (deptId != 0){
+        Dept dept = deptRepository.findByDeptId(deptId);
+        List<Doctor> doctors = doctorRepository.findByDeptDoctor(dept);
+        return new OkResponse(doctors);
+    } else {
+        return new BadResponse(MsgRespone.GLOBAL_INPUT_INVALID);
+        }
+    }
+
+    @Override
+    public BaseResponse getDoctorActive(int checkActive) {
         return null;
     }
 }

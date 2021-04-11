@@ -21,5 +21,5 @@ public class DeptDTO {
 
     private String description;
 
-    private HospitalDTO hospital;
+//    private HospitalDTO hospital;
 }

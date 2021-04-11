@@ -1,3 +1,4 @@
+/*
 package com.hust.medtech.repository;
 
 import com.hust.medtech.data.entity.Hospital;
@@ -11,3 +12,4 @@ public interface HospitalRepository extends JpaRepository<Hospital, Integer> {
 
     Hospital findByHospitalId(int hospitalId);
 }
+*/

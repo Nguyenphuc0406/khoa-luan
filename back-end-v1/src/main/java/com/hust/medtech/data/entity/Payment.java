@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Table(name = "payment")
 public class Payment {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PAYMENT_ID")
     private int paymentId;
 
@@ -24,6 +24,10 @@ public class Payment {
 
     @Column(name = "OUTPATIENT_COST")
     private int outpatientCost;
+
+    @Column(name = "TOTAL_PRICE")
+    private int totalPrice;
+
     @JoinColumn(name = "PATIENT_ID")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Patient patientPay;

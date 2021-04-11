@@ -7,7 +7,7 @@ import com.hust.medtech.base.response.OkResponse;
 import com.hust.medtech.config.MsgRespone;
 import com.hust.medtech.data.dto.ItemOfDeptDTO;
 import com.hust.medtech.data.entity.Dept;
-import com.hust.medtech.data.entity.Hospital;
+
 import com.hust.medtech.data.entity.ItemOfDept;
 import com.hust.medtech.data.request.DeptIdRequest;
 import com.hust.medtech.repository.DeptRepository;

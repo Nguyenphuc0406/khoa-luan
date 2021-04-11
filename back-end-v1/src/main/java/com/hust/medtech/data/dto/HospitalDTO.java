@@ -1,3 +1,4 @@
+/*
 package com.hust.medtech.data.dto;
 
 import lombok.AllArgsConstructor;
@@ -18,3 +19,4 @@ public class HospitalDTO {
 
     private String phoneNumber;
 }
+*/

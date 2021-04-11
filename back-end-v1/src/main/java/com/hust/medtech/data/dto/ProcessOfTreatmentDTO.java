@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -12,6 +15,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ProcessOfTreatmentDTO {
     private Integer potId;
-    private LocalDateTime dateTime;
-    private PatientDTO patient;
+    private String description;
+    private List<Integer> depts = new ArrayList<>();
 }

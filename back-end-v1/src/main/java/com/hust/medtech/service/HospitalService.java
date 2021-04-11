@@ -1,3 +1,4 @@
+/*
 package com.hust.medtech.service;
 
 import com.hust.medtech.base.response.BaseResponse;
@@ -18,3 +19,4 @@ public interface HospitalService {
 
     BaseResponse deleteHospital(int hospitalId);
 }
+*/
