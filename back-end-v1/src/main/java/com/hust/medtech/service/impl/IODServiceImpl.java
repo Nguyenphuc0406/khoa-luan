@@ -5,6 +5,7 @@ import com.hust.medtech.base.response.BaseResponse;
 import com.hust.medtech.base.response.NotFoundResponse;
 import com.hust.medtech.base.response.OkResponse;
 import com.hust.medtech.config.MsgRespone;
+import com.hust.medtech.data.dto.DeptDTO;
 import com.hust.medtech.data.dto.ItemOfDeptDTO;
 import com.hust.medtech.data.entity.Dept;
 
@@ -16,6 +17,7 @@ import com.hust.medtech.service.IODService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +27,7 @@ public class IODServiceImpl implements IODService {
 
     @Autowired
     DeptRepository deptRepository;
+
 
     @Override
     public BaseResponse addItemOfDept(ItemOfDeptDTO itemOfDeptDTO) {
@@ -53,8 +56,7 @@ public class IODServiceImpl implements IODService {
     }
 
     @Override
-    public BaseResponse getAllIodByDeptIdWithHospital(DeptIdRequest deptId) {
-
+    public BaseResponse getAllIodByDeptIdWithHospital(DeptIdRequest deptId, String token) {
 
         Dept dept = deptRepository.findByDeptId(deptId.getDeptId());
         if (deptId != null || dept == null) {
@@ -64,5 +66,25 @@ public class IODServiceImpl implements IODService {
             return new NotFoundResponse(MsgRespone.GLOBAL_INPUT_INVALID);
         }
 
+    }
+
+    @Override
+    public BaseResponse getAllIOD() {
+        List<ItemOfDept> itemOfDepts = iodRepository.findAll();
+        List<ItemOfDeptDTO> itemOfDeptDTOS = new ArrayList<>();
+        for (ItemOfDept item : itemOfDepts) {
+            DeptDTO deptDTO = DeptDTO.builder()
+                    .deptId(item.getDept().getDeptId()).build();
+            ItemOfDeptDTO dto = ItemOfDeptDTO.builder()
+                    .name(item.getName())
+                    .consultingRoom(item.getConsultingRoom())
+                    .price(item.getPrice())
+                    .description(item.getDescription())
+                    .dept(deptDTO)
+                    .code(item.getCode()).build();
+            itemOfDeptDTOS.add(dto);
+        }
+
+        return new OkResponse(itemOfDeptDTOS);
     }
 }

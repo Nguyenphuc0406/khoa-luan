@@ -8,5 +8,7 @@ public interface IODService {
 
     BaseResponse addItemOfDept(ItemOfDeptDTO itemOfDeptDTO);
 
-    BaseResponse getAllIodByDeptIdWithHospital(DeptIdRequest deptId);
+    BaseResponse getAllIodByDeptIdWithHospital(DeptIdRequest deptId, String token);
+
+    BaseResponse getAllIOD();
 }

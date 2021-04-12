@@ -18,11 +18,13 @@ public interface ConfigUrl {
     String URL_DEPT = URL_API + "/dept";
 
     //IOD
-    String URL_ITEM_OF_DEPT = URL_API + "/item-of-dept";
-    String URL_GET_IOD_BY_DEPT = URL_ITEM_OF_DEPT + "/get-by-dept";
+    String URL_ITEM_OF_DEPT = URL_DOCTOR + "/item-of-dept";
+    String URL_GET_IOD_BY_DEPT = URL_DOCTOR + "/get-by-dept";
 
     // phieu kham benh
     String URL_PHIEU_KHAM = URL_API + "/phieu-kham";
-//    String URL_GET_IOD_BY_DEPT =  + "/get-by-dept";
+    //    String URL_GET_IOD_BY_DEPT =  + "/get-by-dept";
 
+    //chi dinh kham
+    String URL_CHI_DINH_KHAM = URL_DOCTOR + "/chi-dinh-kham";
 }

@@ -13,9 +13,9 @@ public class TransMedcalController {
     @Autowired
     TransactionMedicalService transMedService;
 
- /*   @PostMapping(path = ConfigUrl.URL_PHIEU_KHAM)
+    @PostMapping(path = ConfigUrl.URL_CHI_DINH_KHAM)
     public BaseResponse addTransMed(@RequestBody TransactionMedicalDTO transactionMedicalDTO, @RequestHeader("accept-token") String token) {
         return transMedService.addTransMedical(transactionMedicalDTO, token);
-    }*/
+    }
 
 }

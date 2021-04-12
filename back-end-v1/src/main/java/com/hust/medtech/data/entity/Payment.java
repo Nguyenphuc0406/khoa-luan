@@ -31,4 +31,8 @@ public class Payment {
     @JoinColumn(name = "PATIENT_ID")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Patient patientPay;
+
+    @OneToOne
+    @JoinColumn(name = "TRANS_MEDICAL_ID")
+    private TransactionMedical transactionMedical;
 }

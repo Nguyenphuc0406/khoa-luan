@@ -19,13 +19,18 @@ public class IODController {
     }
 
     @PostMapping(path = ConfigUrl.URL_GET_IOD_BY_DEPT)
-    public BaseResponse getIodByDept(@RequestBody DeptIdRequest request) {
-        return iodService.getAllIodByDeptIdWithHospital(request);
+    public BaseResponse getIodByDept(@RequestBody DeptIdRequest request, @RequestHeader("accept-token") String token) {
+        return iodService.getAllIodByDeptIdWithHospital(request, token);
     }
 
     @GetMapping(path = ConfigUrl.URL_ITEM_OF_DEPT + "/{id}")
     public BaseResponse getItemOfDeptById(@PathVariable("id") int iodId) {
         return null;
+    }
+
+    @GetMapping(path = ConfigUrl.URL_ITEM_OF_DEPT)
+    public BaseResponse getAllIod() {
+        return iodService.getAllIOD();
     }
 
 

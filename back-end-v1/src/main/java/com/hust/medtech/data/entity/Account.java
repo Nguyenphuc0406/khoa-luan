@@ -53,8 +53,7 @@ public class Account {
     @Column(name = "CODE")
     private String code;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TransactionMedical> transactionMedicals = new ArrayList<>();
+
 
 
 }

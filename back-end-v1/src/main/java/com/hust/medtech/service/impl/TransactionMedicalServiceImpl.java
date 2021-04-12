@@ -2,17 +2,13 @@ package com.hust.medtech.service.impl;
 
 import com.hust.medtech.base.response.BadResponse;
 import com.hust.medtech.base.response.BaseResponse;
+import com.hust.medtech.base.response.NotFoundResponse;
 import com.hust.medtech.base.response.OkResponse;
 import com.hust.medtech.config.MsgRespone;
 import com.hust.medtech.data.dto.TransactionMedicalDTO;
-import com.hust.medtech.data.entity.Account;
-import com.hust.medtech.data.entity.TransactionMedical;
-import com.hust.medtech.data.entity.TransactionMedicalDetail;
+import com.hust.medtech.data.entity.*;
 import com.hust.medtech.data.entity.key.TransactionMedicalDetailID;
-import com.hust.medtech.repository.AccountRepository;
-import com.hust.medtech.repository.IODRepository;
-import com.hust.medtech.repository.TransMedDetailRepository;
-import com.hust.medtech.repository.TransactionMedicalRepository;
+import com.hust.medtech.repository.*;
 import com.hust.medtech.security.JwtTokenProvider;
 import com.hust.medtech.service.TransactionMedicalService;
 import org.slf4j.Logger;
@@ -20,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +29,11 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
     TransactionMedicalRepository medicalRepository;
 
     @Autowired
+    PatientRepository patientRepository;
+
+    @Autowired
+    DoctorRepository doctorRepository;
+    @Autowired
     TransMedDetailRepository medicalDetailRepository;
     @Autowired
     IODRepository iodRepository;
@@ -40,26 +42,39 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
     @Autowired
     JwtTokenProvider tokenProvider;
 
+    // danh cho BS dang ky chi muc
     @Override
     public BaseResponse addTransMedical(TransactionMedicalDTO transMedicalDTO, String token) {
         if (transMedicalDTO != null && transMedicalDTO.getItemOfDepts() != null) {
-            String accNameByToken = tokenProvider.getUserNameFromJWT(token);
-            Account accCheck = accountRepository.findByUsername(accNameByToken);
-            LOGGER.info("Nguoi dung " + accNameByToken + " vua tao phieu kham");
-            Account account = Account.builder()
-                    .accountId(accCheck.getAccountId()).build();
-            TransactionMedical transactionMedical = TransactionMedical.builder()
-                    .createDate(new Date())
-                    .account(account).build();
-            TransactionMedical medical = medicalRepository.save(transactionMedical);
+            // kiem tra tai khoan nguoi dung
+            Account accPatientCheck = accountRepository.findByUsername(transMedicalDTO.getPatientName());
+            if (accPatientCheck != null) {
+                String accNameByToken = tokenProvider.getUserNameFromJWT(token);
+                LOGGER.info("Bac sy " + accNameByToken + " dang tao phieu kham");
+                // get Doctor by token
+                // BS can login
+                Account accDoctor = accountRepository.findByUsername(accNameByToken);
+                Doctor doctorC = doctorRepository.findByAccount(accDoctor);
 
-            List<TransactionMedicalDetail> details = new ArrayList<>();
-            for (Integer i : transMedicalDTO.getItemOfDepts()) {
-                details.add(new TransactionMedicalDetail(new TransactionMedicalDetailID(medical.getTransId(), i)));
+                Patient patientC = patientRepository.findByAccountId(accPatientCheck.getAccountId());
+                TransactionMedical transactionMedical = TransactionMedical.builder()
+                        .createDate(new Date())
+                        .doctor(doctorC)
+                        .patient(patientC).build();
+                TransactionMedical medical = medicalRepository.save(transactionMedical);
+                LOGGER.info("BS " + accDoctor.getUsername() + " tao don kham cho benh nhan " + accPatientCheck.getUsername() + " thanh cong");
+                List<TransactionMedicalDetail> details = new ArrayList<>();
+                for (Integer i : transMedicalDTO.getItemOfDepts()) {
+                    details.add(new TransactionMedicalDetail(new TransactionMedicalDetailID(medical.getTransId(), i)));
+                }
+                medicalDetailRepository.saveAll(details);
+                LOGGER.info("Luu du lieu phieu kham thanh cong cho benh nhan " + accPatientCheck.getUsername());
+                return new OkResponse(MsgRespone.TAO_PHIEU_KHAM_THANH_CONG);
+            } else {
+                return new NotFoundResponse(MsgRespone.PATIENT_NOT_FOUND);
             }
-            medicalDetailRepository.saveAll(details);
 
-            return new OkResponse(MsgRespone.TAO_PHIEU_KHAM_THANH_CONG);
+
         } else {
             return new BadResponse(MsgRespone.TAO_PHIEU_KHAM_THAT_BAI);
         }

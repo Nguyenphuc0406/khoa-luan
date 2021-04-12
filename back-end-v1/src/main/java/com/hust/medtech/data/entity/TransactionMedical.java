@@ -26,7 +26,13 @@ public class TransactionMedical {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ACCOUNT_ID")
-    private Account account;
+    @JoinColumn(name = "DOCTOR_ID")
+    private Doctor doctor;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "PATIENT_ID")
+    private Patient patient;
+
 
 }
