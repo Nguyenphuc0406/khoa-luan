@@ -11,9 +11,12 @@ import com.hust.medtech.data.entity.Dept;
 
 import com.hust.medtech.data.entity.ItemOfDept;
 import com.hust.medtech.data.request.DeptIdRequest;
+import com.hust.medtech.data.request.FindIODName;
 import com.hust.medtech.repository.DeptRepository;
 import com.hust.medtech.repository.IODRepository;
 import com.hust.medtech.service.IODService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,8 @@ import java.util.List;
 
 @Service
 public class IODServiceImpl implements IODService {
+    public static final Logger LOGGER = LoggerFactory.getLogger(IODServiceImpl.class);
+
     @Autowired
     IODRepository iodRepository;
 
@@ -76,6 +81,7 @@ public class IODServiceImpl implements IODService {
             DeptDTO deptDTO = DeptDTO.builder()
                     .deptId(item.getDept().getDeptId()).build();
             ItemOfDeptDTO dto = ItemOfDeptDTO.builder()
+                    .iodId(item.getIodId())
                     .name(item.getName())
                     .consultingRoom(item.getConsultingRoom())
                     .price(item.getPrice())
@@ -86,5 +92,41 @@ public class IODServiceImpl implements IODService {
         }
 
         return new OkResponse(itemOfDeptDTOS);
+    }
+
+    @Override
+    public BaseResponse getIodById(Integer iodId) {
+        if (iodId != null) {
+            ItemOfDept itemOfDept = iodRepository.findByIodId(iodId);
+            if (itemOfDept != null) {
+                LOGGER.error("Tim kiem IOD voi id: " + iodId + ", ten: " + itemOfDept.getName());
+                return new OkResponse(itemOfDept);
+            } else {
+                LOGGER.error("Khong tim thay IOD voi id: " + iodId);
+                return new NotFoundResponse(MsgRespone.IOD_NOT_FOUND);
+            }
+        } else {
+            LOGGER.error("Du lieu IOD truyen vao bi loi: " + iodId);
+            return new BadResponse(MsgRespone.GLOBAL_INPUT_INVALID);
+        }
+    }
+
+    @Override
+    public BaseResponse findIodByNam(FindIODName findIODName) {
+        String name = findIODName.getNameIod();
+        if (name != null) {
+            List<ItemOfDept> iod = iodRepository.findByNameContaining(name);
+            if (!iod.isEmpty()) {
+                LOGGER.info("Truy van tim IOD voi name: " + name);
+                return new OkResponse(iod);
+
+            } else {
+                return new NotFoundResponse(MsgRespone.IOD_NOT_FOUND);
+            }
+        } else {
+            LOGGER.error("Du lieu truyen vao loi voi name: " + name);
+            return new NotFoundResponse(MsgRespone.GLOBAL_INPUT_INVALID);
+        }
+
     }
 }
