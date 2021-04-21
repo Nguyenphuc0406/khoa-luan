@@ -7,6 +7,7 @@ public interface ConfigUrl {
     //patient
     String URL_PATIENT = URL_API + "/patient";
     String URL_PATIENT_FORM = URL_PATIENT + "/form";
+    String URL_DATA_PAYMENT = URL_PATIENT + "/payment";
 
     //doctor
     String URL_DOCTOR = URL_API + "/doctor";

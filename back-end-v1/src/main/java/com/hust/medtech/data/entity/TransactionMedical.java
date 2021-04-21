@@ -34,5 +34,10 @@ public class TransactionMedical {
     @JoinColumn(name = "PATIENT_ID")
     private Patient patient;
 
+    @Column(name = "STATUS")
+    // 1 - da thanh toan
+    // 0 - chua thanh toan
+    private Integer status;
+
 
 }

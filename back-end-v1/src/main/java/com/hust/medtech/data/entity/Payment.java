@@ -19,9 +19,6 @@ public class Payment {
     @Column(name = "PAYMENT_ID")
     private int paymentId;
 
-    @Column(name = "MATERIAL_COST")
-    private int materialCost;
-
     @Column(name = "OUTPATIENT_COST")
     private int outpatientCost;
 

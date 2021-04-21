@@ -4,6 +4,8 @@ public interface MsgRespone {
     //global
     String GLOBAL_TRUNG_DU_LIEU = "Trung du lieu";
     String GLOBAL_INPUT_INVALID = "Input invalid";
+    String GLOBAL_DATA_NOT_FOUND = "Data not found";
+
     //patient
     String PATIENT_NOT_FOUND = "Patient not found!";
     String PATIENT_ADD_SUCCESS = "Add patient success";
@@ -36,4 +38,7 @@ public interface MsgRespone {
     //trans medical
     String TAO_PHIEU_KHAM_THANH_CONG = "Tao phieu kham thanh cong";
     String TAO_PHIEU_KHAM_THAT_BAI = "Tao phieu kham that bai";
+
+    //payment
+    String DATA_PAYMENT_NOT_FOUNT = "Khong tim thay du lieu phieu kham";
 }

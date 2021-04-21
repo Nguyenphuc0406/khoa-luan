@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PaymentDTO {
     private Integer paymentId;
-    private int materialCost;
     private int outpatientCost;
-    private PatientDTO patient;
+    private int totalPrice;
+    private Integer patientId;
+    private Integer transMedicalId;
 
 }
