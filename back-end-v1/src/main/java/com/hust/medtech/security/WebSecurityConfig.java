@@ -61,6 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements A
         http.cors(); // Ngăn chặn request từ một domain khác
         // Cho phép tất cả mọi người truy cập
      http.authorizeRequests().antMatchers(HttpMethod.POST, "/login").permitAll();
+     http.authorizeRequests().antMatchers(HttpMethod.GET, "/getUserInfo").permitAll();
 //        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/patient").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/doctor/**").access("hasRole('ADMIN')");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/doctor/**").access("hasRole('ADMIN')");

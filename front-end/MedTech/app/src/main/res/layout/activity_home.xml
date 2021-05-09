@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="presenter"
+            type="com.hust.medtech.screen.home.HomePresenter" />
+    </data>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:background="@color/background"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="16dp"
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_hello">
+
+                    </androidx.appcompat.widget.AppCompatImageView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textSize="14sp"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/black1"
+                        android:text="Chào buổi sáng!">
+                    </TextView>
+                </LinearLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/color_app"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold|italic"
+                    android:text="Nguyen van A"
+                    android:layout_height="wrap_content">
+
+                </androidx.appcompat.widget.AppCompatTextView>
+            </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:src="@mipmap/ic_doctor"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginBottom="10dp"
+                    android:adjustViewBounds="true"
+                    android:layout_height="wrap_content">
+
+                </androidx.appcompat.widget.AppCompatImageView>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_below="@+id/header"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_margin="20dp"
+                card_view:cardElevation="10dp"
+                card_view:cardCornerRadius="20dp"
+                android:layout_height="170dp">
+                <ViewFlipper
+                    android:id="@+id/viewlipper"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></ViewFlipper>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="-20dp"
+            android:paddingTop="2dp"
+            android:translationY="-10dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="12dp"
+            app:cardPreventCornerOverlap="false"
+            app:contentPadding="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="4dp"
+                android:paddingBottom="8dp"
+                android:shadowDx="0"
+                android:shadowDy="30">
+
+                <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+                    android:id="@+id/AHBottomNavigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="8dp"
+
+                    />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </RelativeLayout>
+</layout>

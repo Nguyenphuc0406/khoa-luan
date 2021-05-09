@@ -4,6 +4,7 @@ import com.hust.medtech.base.response.BaseResponse;
 import com.hust.medtech.base.response.OkResponse;
 import com.hust.medtech.config.ConfigUrl;
 import com.hust.medtech.data.entity.Account;
+import com.hust.medtech.repository.AccountRepository;
 import com.hust.medtech.security.CustomUserDetails;
 import com.hust.medtech.security.JwtTokenProvider;
 import com.hust.medtech.service.impl.AccountServiceImpl;
@@ -13,9 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AccountController {
@@ -25,6 +24,8 @@ public class AccountController {
     private JwtTokenProvider tokenProvider;
     @Autowired
     private AccountServiceImpl accountService;
+    @Autowired
+    private AccountRepository accountRepository;
 
     @PostMapping(ConfigUrl.URL_LOGIN)
     public BaseResponse login(@Validated @RequestBody Account request) {
@@ -43,6 +44,14 @@ public class AccountController {
         // Nếu không xảy ra exception tức là thông tin hợp lệ
         // Set thông tin authentication vào Security Context
 
+    }
+    @GetMapping("/getUserInfo")
+    public BaseResponse getUserInfoByToken(){
+        String patientName = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account accountParent = accountRepository.findByUsername(patientName);
+
+        accountParent.setPassword(null);
+        return new OkResponse(accountParent);
     }
 
 }

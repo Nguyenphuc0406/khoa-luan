@@ -46,8 +46,6 @@ public class PaymentServiceImpl implements PaymentService {
         // tim phieu kham tu BS  ung voi benh nhan va status =0 : chua thanh toan
         TransactionMedical transactionMedical = tranMedRepository.findByPatientAndStatus(patient, 0);
         try {
-
-
             List<Integer> iodByPatient = transMedDetailRepository.getListIodByTransId(transactionMedical.getTransId());
             if (iodByPatient != null) {
                 List<ItemOfDept> iodepts = new ArrayList<>();
