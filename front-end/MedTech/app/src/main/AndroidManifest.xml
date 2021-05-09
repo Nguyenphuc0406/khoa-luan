@@ -20,6 +20,9 @@
         <activity android:name=".screen.home.HomeActivity">
 
         </activity>
+        <activity android:name=".screen.notify.NotifyActivity">
+
+        </activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.hust.medtech.api;
 
 import com.hust.medtech.api.request.LoginRequest;
+import com.hust.medtech.api.response.GetNewsResponse;
 import com.hust.medtech.api.response.LoginResponse;
 import com.hust.medtech.api.response.UserInfoResponse;
 
@@ -16,4 +17,7 @@ public interface MedTedAPI {
 
     @GET("/getUserInfo")
     Call<UserInfoResponse> getUserInfo(@Header("Authorization") String token);
+
+    @GET("/getNews")
+    Call<GetNewsResponse> getNews(@Header("Authorization") String token);
 }

@@ -2,6 +2,7 @@ package com.hust.medtech.screen.login;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -27,17 +28,18 @@ public class LoginPresenter {
         this.mContext = mContext;
         initData();
     }
-    private void initData(){
+
+    private void initData() {
         userName = new ObservableField<>("hoanganh");
         pass = new ObservableField<>("123456");
     }
 
-    public void login(){
-        if(TextUtils.isEmpty(userName.get())){
+    public void login() {
+        if (TextUtils.isEmpty(userName.get())) {
             Toast.makeText(mContext, "Vui lòng nhập tài khoản", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(pass.get())){
+        if (TextUtils.isEmpty(pass.get())) {
             Toast.makeText(mContext, "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -48,10 +50,18 @@ public class LoginPresenter {
                 .enqueue(new Callback<LoginResponse>() {
                     @Override
                     public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                        if(response.code() == 200){
-                            getUserInfo("Bearer "+response.body().getData());
-                        }else {
-                            onFailure(null,null);
+                        if (response.code() == 200) {
+                            SharedPreferences sharedPreferences = mContext.getSharedPreferences("test", Context.MODE_PRIVATE);
+                            String token = "Bearer " + response.body().getData();
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("token", token);
+                            // Save.
+                            editor.apply();
+                            editor.commit();
+
+                            getUserInfo(token);
+                        } else {
+                            onFailure(null, null);
                         }
                     }
 
@@ -62,15 +72,15 @@ public class LoginPresenter {
                 });
     }
 
-    private void getUserInfo(String token){
+    private void getUserInfo(String token) {
         MedTedInstance.getInstance().getUserInfo(token)
                 .enqueue(new Callback<UserInfoResponse>() {
                     @Override
                     public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
-                        if(response.code() == 200){
+                        if (response.code() == 200) {
                             mContext.startActivity(new Intent(mContext, HomeActivity.class));
-                        }else {
-                            onFailure(null,null);
+                        } else {
+                            onFailure(null, null);
                         }
                     }
 

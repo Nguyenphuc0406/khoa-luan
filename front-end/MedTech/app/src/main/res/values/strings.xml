@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">MedTech</string>
     <string name="app_title">MEDICAL TECH</string>
+    <string name="menu_register">Đăng kí khám bệnh</string>
+    <string name="menu_payment">Thanh toán</string>
+    <string name="menu_info">Giới thiệu</string>
 </resources>

@@ -3,11 +3,23 @@ package com.hust.medtech.controller;
 import com.hust.medtech.base.response.BaseResponse;
 import com.hust.medtech.base.response.OkResponse;
 import com.hust.medtech.config.ConfigUrl;
+import com.hust.medtech.config.MyCrawler;
+import com.hust.medtech.data.dto.NotificationDTO;
 import com.hust.medtech.data.entity.Account;
 import com.hust.medtech.repository.AccountRepository;
 import com.hust.medtech.security.CustomUserDetails;
 import com.hust.medtech.security.JwtTokenProvider;
 import com.hust.medtech.service.impl.AccountServiceImpl;
+import edu.uci.ics.crawler4j.crawler.CrawlConfig;
+import edu.uci.ics.crawler4j.crawler.CrawlController;
+import edu.uci.ics.crawler4j.fetcher.PageFetcher;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
+import lombok.SneakyThrows;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +27,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class AccountController {
@@ -52,6 +67,43 @@ public class AccountController {
 
         accountParent.setPassword(null);
         return new OkResponse(accountParent);
+    }
+    @SneakyThrows
+    @GetMapping("/getNews")
+    public BaseResponse getNews(){
+        Document doc = Jsoup.connect("https://vnexpress.net/").get();
+        Elements elements = doc.getElementsByClass("item-news");
+        List<NotificationDTO> noti = new ArrayList<>();
+        for (Element e : elements){
+            try {
+                Element edTitle = e.getElementsByClass("title-news").get(0).child(0);
+                String data = edTitle.text();
+                String linkUrl = edTitle.attr("href");
+                String content = e.getElementsByClass("description").get(0).child(0).text();
+                if(data.contains("Covid-19") || data.contains("nCoV") || content.contains("Covid-19")){
+                    //strings.add(data);
+//                    strings.add(content);
+                    Elements ed = e.getElementsByClass("thumb-art").get(0).child(0).child(0)
+                            .getElementsByTag("img");
+                    String link = ed.attr("data-src");
+                    if("".equals(link)){
+                         link = ed.attr("src");
+                    }
+                    NotificationDTO notificationDTO = NotificationDTO.builder()
+                            .title(data)
+                            .content(content)
+                            .link(link)
+                            .srcUrl(linkUrl).build();
+                    noti.add(notificationDTO);
+
+
+                }
+
+            }catch (Exception ex){
+
+            }
+        }
+        return new OkResponse(noti);
     }
 
 }

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="presenter"
             type="com.hust.medtech.screen.home.HomePresenter" />
     </data>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:background="@color/background"
         android:layout_height="match_parent">
@@ -38,7 +39,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_gravity="center"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:layout_marginLeft="5dp"
                         android:textColor="@color/black1"
                         android:text="Chào buổi sáng!">
@@ -46,10 +47,10 @@
                 </LinearLayout>
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
-                    android:textColor="@color/color_app"
+                    android:textColor="@color/black1"
                     android:layout_marginLeft="15dp"
                     android:textSize="18sp"
-                    android:textStyle="bold|italic"
+                    android:textStyle="bold"
                     android:text="Nguyen van A"
                     android:layout_height="wrap_content">
 
@@ -57,38 +58,127 @@
             </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="28dp"
                     android:src="@mipmap/ic_doctor"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerInParent="true"
                     android:layout_marginBottom="10dp"
                     android:adjustViewBounds="true"
-                    android:layout_height="wrap_content">
+                    android:layout_height="28dp">
 
                 </androidx.appcompat.widget.AppCompatImageView>
         </RelativeLayout>
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_below="@+id/header"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <com.google.android.material.card.MaterialCardView
+            android:layout_height="match_parent">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_margin="20dp"
-                card_view:cardElevation="10dp"
-                card_view:cardCornerRadius="20dp"
-                android:layout_height="170dp">
-                <ViewFlipper
-                    android:id="@+id/viewlipper"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/card"
+                    android:layout_below="@+id/header"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></ViewFlipper>
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        card_view:cardElevation="10dp"
+                        card_view:cardCornerRadius="20dp"
+                        android:layout_height="160dp">
+                        <ViewFlipper
+                            android:id="@+id/viewlipper"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"></ViewFlipper>
 
 
-            </com.google.android.material.card.MaterialCardView>
+                    </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/menu"
+                    android:layout_below="@+id/card"
+                    android:layout_centerInParent="true"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <include
+                        layout="@layout/item_menu"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        app:icon="@{@drawable/icon_checklist}"
+                        app:onClick="@{v -> presenter.onChangeMenu(1)}"
+                        app:active="@{presenter.type == 1}"
+                        app:title="@{@string/menu_register}"
+                        android:layout_height="wrap_content">
+
+                    </include>
+                    <include
+                        layout="@layout/item_menu"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        app:active="@{presenter.type == 2}"
+                        app:icon="@{@drawable/payment}"
+                        app:onClick="@{v -> presenter.onChangeMenu(2)}"
+                        app:title="@{@string/menu_payment}"
+                        android:layout_height="wrap_content">
+
+                    </include>
+                    <include
+                        layout="@layout/item_menu"
+                        android:layout_weight="1"
+                        app:active="@{presenter.type == 3}"
+                        android:layout_width="0dp"
+                        app:icon="@{@drawable/info}"
+                        app:onClick="@{v -> presenter.onChangeMenu(3)}"
+                        app:title="@{@string/menu_info}"
+                        android:layout_height="wrap_content">
+
+                    </include>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/menu"
+
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:text="Tin mới"
+                        android:textStyle="bold"
+                        android:textColor="@color/black1"
+                        android:textSize="16sp"
+                        >
+
+                    </androidx.appcompat.widget.AppCompatTextView>
+
+
+                    <com.yarolegovich.discretescrollview.DiscreteScrollView
+                        android:id="@+id/ry"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        app:adapterScrollView="@{presenter.mAdapter}">
+
+                    </com.yarolegovich.discretescrollview.DiscreteScrollView>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
         <androidx.cardview.widget.CardView
             android:id="@+id/view"
             android:layout_width="match_parent"

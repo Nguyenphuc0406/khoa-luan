@@ -1,6 +1,7 @@
 package com.hust.medtech.screen.home;
 
 import android.graphics.Color;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -32,6 +33,12 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomePresente
 
     private void setupMenu() {
         AHBottomNavigation bottomNavigation = mBinding.AHBottomNavigation;
+        mBinding.AHBottomNavigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
 // Create items
         AHBottomNavigationItem item1 = new AHBottomNavigationItem("Trang chủ",
@@ -54,7 +61,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomePresente
         bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
 
 // Change colors
-        bottomNavigation.setAccentColor(Color.parseColor("#5E80E6"));
+        bottomNavigation.setAccentColor(Color.parseColor("#54c0f9"));
         bottomNavigation.setInactiveColor(Color.parseColor("#7998af"));
 
 // Force to tint the drawable (useful for font with icon for example)
