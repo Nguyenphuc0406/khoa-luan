@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_height="match_parent">
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:hint="Nhập tên của bạn"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+           android:id="@+id/edt_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:textColor="#2196F3"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:text="Vui lòng chọn các mục cần khám"
+        android:layout_height="wrap_content">
+
+    </TextView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+       android:id="@+id/check_1"
+        android:layout_width="wrap_content"
+        android:text="Khám Tai mũi họng"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+
+    </androidx.appcompat.widget.AppCompatCheckBox>
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/check_2"
+        android:layout_width="wrap_content"
+        android:text="Khám Tim"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+
+    </androidx.appcompat.widget.AppCompatCheckBox>
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/check_3"
+        android:layout_width="wrap_content"
+        android:text="Khám Tiêu Hóa"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+
+    </androidx.appcompat.widget.AppCompatCheckBox>
+    <androidx.appcompat.widget.AppCompatCheckBox
+
+        android:id="@+id/check_4"
+        android:layout_width="wrap_content"
+        android:text="Khám Răng hàm mặt"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+
+    </androidx.appcompat.widget.AppCompatCheckBox>
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_marginTop="20dp"
+        android:id="@+id/btn_confirm"
+        android:text="xác nhận"
+        android:background="#2196F3"
+        android:textColor="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+
+</LinearLayout>

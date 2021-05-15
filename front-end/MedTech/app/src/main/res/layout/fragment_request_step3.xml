@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="presenter"
+            type="com.hust.medtech.screen.requestmed.fragment.RequestStep3Fragment" />
+    </data>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:background="@color/background"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+
+        app:leftIcon="@{@drawable/ic_back}"
+        app:leftIconClick="@{v -> presenter.onCancel()}"
+        app:title="@{@string/menu_request_med}">
+
+    </include>
+    <RelativeLayout
+        android:id="@+id/step"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/left"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="27dp"
+                android:gravity="center"
+                android:background="@drawable/shape_oval"
+                android:layout_height="27dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="1"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/left"
+            android:layout_toLeftOf="@+id/center"
+            android:background="@drawable/dotted_active"
+            android:layerType="software"
+            android:layout_height="5dp">
+
+        </ImageView>
+
+        <RelativeLayout
+            android:id="@+id/center"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="27dp"
+                android:gravity="center"
+                android:background="@drawable/shape_oval"
+                android:layout_height="27dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="2"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/center"
+            android:layerType="software"
+            android:layout_toLeftOf="@+id/right"
+            android:background="@drawable/dotted_active"
+            android:layout_height="5dp">
+
+        </ImageView>
+        <RelativeLayout
+            android:id="@+id/right"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="27dp"
+                android:gravity="center"
+                android:background="@drawable/shape_oval"
+                android:layout_height="27dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="3"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="27dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:background="@drawable/shape_oval"
+                android:layout_height="27dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="3"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_below="@+id/step"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:text="Chọn Khoa cần khám"
+            android:textSize="15sp"
+            android:layout_marginLeft="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            app:adapter="@{presenter.mAdapter}"
+            android:layout_above="@+id/bottom"
+            android:layout_height="wrap_content">
+
+
+        </androidx.recyclerview.widget.RecyclerView>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="20dp"
+            android:text="Ghi chú"
+            android:textSize="13sp"
+            android:layout_height="wrap_content">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+        <androidx.appcompat.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@={presenter.des}"
+            android:layout_height="wrap_content">
+
+        </androidx.appcompat.widget.AppCompatEditText>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:background="@drawable/button"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/white"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:text="Xác nhận"
+        android:onClick="@{v -> presenter.registerMed()}"
+        android:layout_height="wrap_content">
+
+    </androidx.appcompat.widget.AppCompatButton>
+</RelativeLayout>
+</layout>

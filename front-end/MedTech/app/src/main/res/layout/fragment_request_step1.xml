@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="presenter"
+            type="com.hust.medtech.screen.requestmed.fragment.RequestStep1Fragment" />
+    </data>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:background="@color/background"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:leftIcon="@{@drawable/ic_back}"
+        app:leftIconClick="@{v -> presenter.onCancel()}"
+        app:title="@{@string/menu_request_med}">
+
+    </include>
+    <RelativeLayout
+        android:id="@+id/step"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/left"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="27dp"
+                android:gravity="center"
+                android:background="@drawable/shape_oval"
+                android:layout_height="27dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="1"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/left"
+            android:layout_toLeftOf="@+id/center"
+            android:background="@drawable/dotted"
+            android:layerType="software"
+            android:layout_height="5dp">
+
+        </ImageView>
+
+        <RelativeLayout
+            android:id="@+id/center"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="30dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:background="@drawable/shape_oval"
+                android:layout_height="30dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="2"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="27dp"
+                android:gravity="center"
+                android:backgroundTint="#AAA6AA"
+                android:background="@drawable/shape_oval"
+                android:layout_height="27dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="2"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/center"
+            android:layerType="software"
+            android:layout_toLeftOf="@+id/right"
+            android:background="@drawable/dotted"
+            android:layout_height="5dp">
+
+        </ImageView>
+        <RelativeLayout
+            android:id="@+id/right"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="27dp"
+                android:gravity="center"
+                android:backgroundTint="#AAA6AA"
+                android:background="@drawable/shape_oval"
+                android:layout_height="27dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="3"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="27dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:background="@drawable/shape_oval"
+                android:layout_height="27dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="3"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_below="@+id/step"
+        android:layout_width="match_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:text="Hướng dẫn các bước đăng kí"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/purple_200"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Bước 1: Quét mã QR"
+                android:textSize="14sp"
+                ></androidx.appcompat.widget.AppCompatTextView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/ic_left"
+                    android:orientation="vertical"
+                    android:layout_width="5dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="@color/black1"
+                    android:background="@drawable/shape_oval"
+                    android:layout_height="5dp">
+
+                </LinearLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_toRightOf="@+id/ic_left"
+                    android:text="Vui lòng quét mã tại bệnh viện để lấy danh sách các khoa khám tại bệnh viện."
+                    android:layout_marginLeft="5dp"
+                    android:textSize="11sp"
+                    android:textColor="@color/black1"
+                    android:layout_height="wrap_content">
+
+                </androidx.appcompat.widget.AppCompatTextView>
+
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/purple_200"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Bước 2: Xác nhận thông tin"
+                android:textSize="14sp"
+                ></androidx.appcompat.widget.AppCompatTextView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/ic_left1"
+                    android:orientation="vertical"
+                    android:layout_width="5dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="@color/black1"
+                    android:background="@drawable/shape_oval"
+                    android:layout_height="5dp">
+
+                </LinearLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_toRightOf="@+id/ic_left1"
+                    android:text="Vui lòng xác nhận đúng thông tin của bạn trước khi khám bệnh."
+                    android:layout_marginLeft="5dp"
+                    android:textSize="11sp"
+                    android:textColor="@color/black1"
+                    android:layout_height="wrap_content">
+
+                </androidx.appcompat.widget.AppCompatTextView>
+
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/purple_200"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Bước 3: Chọn chuyên khoa"
+                android:textSize="14sp"
+                ></androidx.appcompat.widget.AppCompatTextView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/ic_left2"
+                    android:orientation="vertical"
+                    android:layout_width="5dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="@color/black1"
+                    android:background="@drawable/shape_oval"
+                    android:layout_height="5dp">
+
+                </LinearLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_toRightOf="@+id/ic_left2"
+                    android:text="Vui lòng chọn các khoa mà bạn muốn khám, có thể chọn một hoặc nhiều khoa"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="11sp"
+                    android:textColor="@color/black1"
+                    android:layout_height="wrap_content">
+
+                </androidx.appcompat.widget.AppCompatTextView>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/ic_left3"
+                    android:orientation="vertical"
+                    android:layout_width="5dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="@color/black1"
+                    android:background="@drawable/shape_oval"
+                    android:layout_height="5dp">
+
+                </LinearLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_toRightOf="@+id/ic_left3"
+                    android:text="Nếu tạo yêu cầu thành công vui lòng làm theo hướng dẫn."
+                    android:layout_marginLeft="5dp"
+                    android:textSize="11sp"
+                    android:textColor="@color/black1"
+                    android:layout_height="wrap_content">
+
+                </androidx.appcompat.widget.AppCompatTextView>
+
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:background="@drawable/button"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/white"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:text="Quét mã QR"
+        android:onClick="@{v -> presenter.onScanCode()}"
+
+        android:layout_height="wrap_content">
+
+    </androidx.appcompat.widget.AppCompatButton>
+</RelativeLayout>
+</layout>
