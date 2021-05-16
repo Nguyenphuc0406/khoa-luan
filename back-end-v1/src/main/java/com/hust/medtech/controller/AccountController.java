@@ -99,8 +99,6 @@ public class AccountController {
                             .link(link)
                             .srcUrl(linkUrl).build();
                     noti.add(notificationDTO);
-
-
                 }
 
             }catch (Exception ex){

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.databinding.ObservableField;
@@ -17,23 +18,34 @@ import com.hust.medtech.base.BaseRecyclerview;
 import com.hust.medtech.base.CallBack;
 import com.hust.medtech.model.Notify;
 import com.hust.medtech.model.UserInfo;
+import com.hust.medtech.screen.PaymentActivity;
 import com.hust.medtech.screen.notify.NotifyActivity;
 import com.hust.medtech.screen.requestmed.RequestMedTechActivity;
 import com.hust.medtech.screen.requestmed.fragment.RequestStep1Fragment;
 import com.hust.medtech.utils.DataUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import vn.momo.momo_partner.AppMoMoLib;
+import vn.momo.momo_partner.MoMoParameterNamePayment;
 
 public class HomePresenter {
     private Context mContext;
     public ObservableInt type;
     public ObservableField<String> username;
     public ObservableField<BaseRecyclerview<Notify>> mAdapter;
+
+
 private  List<Notify> strings;
 
 
@@ -43,6 +55,8 @@ private  List<Notify> strings;
         initData();
     }
     private void initData(){
+        AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT);
+
         type = new ObservableInt();
         strings = new ArrayList<>();
         username = new ObservableField(DataUtils.getUserInfo(mContext).getFullName());
@@ -69,6 +83,10 @@ private  List<Notify> strings;
         if(type ==1){
             mContext.startActivity(new Intent(mContext, RequestMedTechActivity.class));
 
+        }else  if(type ==2){
+            mContext.startActivity(new Intent(mContext, PaymentActivity.class));
+//           requestPayment();
+
         }
     }
     private void getNew(String token){
@@ -90,5 +108,7 @@ private  List<Notify> strings;
                     }
                 });
     }
+
+
 
 }

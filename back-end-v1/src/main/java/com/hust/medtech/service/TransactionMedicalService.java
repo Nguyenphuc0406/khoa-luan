@@ -5,4 +5,5 @@ import com.hust.medtech.data.dto.TransactionMedicalDTO;
 
 public interface TransactionMedicalService {
     BaseResponse addTransMedical(TransactionMedicalDTO transMedicalDTO, String token);
+    BaseResponse getTotalPayment(String userName);
 }

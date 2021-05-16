@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,6 +34,8 @@ public class TransactionMedical {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "PATIENT_ID")
     private Patient patient;
+    @OneToMany(mappedBy = "transDetailId.transactionMedical",fetch = FetchType.LAZY)
+    private List<TransactionMedicalDetail> transactionMedicalDetails;
 
     @Column(name = "STATUS")
     // 1 - da thanh toan

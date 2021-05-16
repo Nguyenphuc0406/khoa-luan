@@ -5,20 +5,25 @@ import com.hust.medtech.base.response.BaseResponse;
 import com.hust.medtech.base.response.NotFoundResponse;
 import com.hust.medtech.base.response.OkResponse;
 import com.hust.medtech.config.MsgRespone;
+import com.hust.medtech.data.dto.ItemOfDeptDTO;
 import com.hust.medtech.data.dto.TransactionMedicalDTO;
 import com.hust.medtech.data.entity.*;
-import com.hust.medtech.data.entity.key.TransactionMedicalDetailID;
+import com.hust.medtech.data.entity.response.DataPayment;
 import com.hust.medtech.repository.*;
 import com.hust.medtech.security.JwtTokenProvider;
 import com.hust.medtech.service.TransactionMedicalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class TransactionMedicalServiceImpl implements TransactionMedicalService {
@@ -65,7 +70,7 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
                 LOGGER.info("BS " + accDoctor.getUsername() + " tao don kham cho benh nhan " + accPatientCheck.getUsername() + " thanh cong");
                 List<TransactionMedicalDetail> details = new ArrayList<>();
                 for (Integer i : transMedicalDTO.getItemOfDepts()) {
-                    details.add(new TransactionMedicalDetail(new TransactionMedicalDetailID(medical.getTransId(), i)));
+//                    details.add(new TransactionMedicalDetail(new TransactionMedicalDetailID(medical, i)));
                 }
                 medicalDetailRepository.saveAll(details);
                 LOGGER.info("Luu du lieu phieu kham thanh cong cho benh nhan " + accPatientCheck.getUsername());
@@ -78,6 +83,40 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
         } else {
             return new BadResponse(MsgRespone.TAO_PHIEU_KHAM_THAT_BAI);
         }
+    }
+
+    @Override
+    public BaseResponse getTotalPayment(String userName) {
+        Pageable paging = PageRequest.of(0,1);
+        Page<TransactionMedical> transactionMedical = medicalRepository.
+                _getTransByUserAnDate(userName,paging);
+
+        if(transactionMedical == null || transactionMedical.getContent() == null
+        || transactionMedical.getContent().isEmpty()){
+            return new NotFoundResponse("Ban khog co giao dich nao");
+        }
+        List<ItemOfDeptDTO> itemOfDepts = new ArrayList<>();
+        TransactionMedical item = transactionMedical.getContent().get(0);
+        AtomicInteger totalPrice = new AtomicInteger();
+        item.getTransactionMedicalDetails()
+                .forEach(transactionMedicalDetail -> {
+                    int p = transactionMedicalDetail.getTransDetailId().
+                            getItemOfDeptId().getPrice();
+                    ItemOfDeptDTO i = new ItemOfDeptDTO();
+                    i.setName(transactionMedicalDetail.getTransDetailId().
+                            getItemOfDeptId().getName());
+                    i.setPrice(p);
+                    itemOfDepts.add(i);
+                    totalPrice.addAndGet(p);
+                });
+
+        DataPayment dataPayment = new DataPayment();
+        dataPayment.setItemOfDepts(itemOfDepts);
+        dataPayment.setNamePatient(item.getPatient().getAccount().getFullName());
+        dataPayment.setTotalPrice(totalPrice.get());
+        dataPayment.setTransMedId(item.getTransId());
+
+        return new OkResponse(dataPayment);
     }
 
 

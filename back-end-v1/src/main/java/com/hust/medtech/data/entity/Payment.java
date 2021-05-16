@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -15,9 +16,10 @@ import javax.persistence.*;
 @Table(name = "payment")
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PAYMENT_ID")
-    private int paymentId;
+    @GeneratedValue( generator = "uuid2" )
+    @GenericGenerator( name = "uuid2", strategy = "uuid2" )
+    private String paymentId;
 
     @Column(name = "OUTPATIENT_COST")
     private int outpatientCost;

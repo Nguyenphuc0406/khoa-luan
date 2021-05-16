@@ -29,4 +29,5 @@ public interface ConfigUrl {
 
     //chi dinh kham
     String URL_CHI_DINH_KHAM = URL_DOCTOR + "/chi-dinh-kham";
+    String URL_CHI_DINH_KHAM_GET_ID = URL_PATIENT + "/getTotalPayment";
 }

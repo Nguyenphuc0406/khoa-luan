@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -39,5 +40,9 @@ public class ItemOfDept {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DEPT_ID")
     private Dept dept;
+
+    @OneToMany(mappedBy = "transDetailId.itemOfDeptId",fetch = FetchType.LAZY)
+    private List<TransactionMedicalDetail> transactionMedicalDetails;
+
 
 }

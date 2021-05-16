@@ -1,5 +1,6 @@
 package com.hust.medtech.data.entity.response;
 
+import com.hust.medtech.data.dto.ItemOfDeptDTO;
 import com.hust.medtech.data.entity.ItemOfDept;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.List;
 public class DataPayment {
 
     private Integer transMedId;
-    private List<ItemOfDept> itemOfDepts;
+    private List<ItemOfDeptDTO> itemOfDepts;
     private Integer totalPrice;
     private String namePatient;
 //    private Integer outpatientCost;

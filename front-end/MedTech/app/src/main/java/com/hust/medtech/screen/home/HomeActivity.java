@@ -1,10 +1,13 @@
 package com.hust.medtech.screen.home;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -13,8 +16,17 @@ import com.hust.medtech.R;
 import com.hust.medtech.base.BaseActivity;
 import com.hust.medtech.databinding.ActivityHomeBinding;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import vn.momo.momo_partner.AppMoMoLib;
+import vn.momo.momo_partner.MoMoParameterNamePayment;
 
 public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomePresenter> {
 
@@ -117,4 +129,11 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomePresente
         viewFlipper.setAnimation(animation_slide_in);
         viewFlipper.setAnimation(animation_slide_out);
     }
+
+
+
+
+
+    //example payment
+
 }

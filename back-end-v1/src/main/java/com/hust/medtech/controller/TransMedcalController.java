@@ -6,6 +6,7 @@ import com.hust.medtech.data.dto.TransactionMedicalDTO;
 import com.hust.medtech.service.TransactionMedicalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +17,12 @@ public class TransMedcalController {
     @PostMapping(path = ConfigUrl.URL_CHI_DINH_KHAM)
     public BaseResponse addTransMed(@RequestBody TransactionMedicalDTO transactionMedicalDTO, @RequestHeader("accept-token") String token) {
         return transMedService.addTransMedical(transactionMedicalDTO, token);
+    }
+
+    @GetMapping(path = ConfigUrl.URL_CHI_DINH_KHAM_GET_ID)
+    public BaseResponse getTotalPayment() {
+        String patientName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return transMedService.getTotalPayment(patientName);
     }
 
 }

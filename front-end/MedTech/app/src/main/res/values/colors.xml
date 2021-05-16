@@ -11,4 +11,5 @@
     <color name="black1">#222121</color>
     <color name="white">#FFFFFFFF</color>
     <color name="background">#f8faff</color>
+    <color name="red">#F11554</color>
 </resources>

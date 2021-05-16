@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="presenter"
+            type="com.hust.medtech.screen.PaymentActivity" />
+    </data>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:background="@color/background"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+
+        app:leftIcon="@{@drawable/ic_back}"
+        app:leftIconClick="@{v -> presenter.onCancel()}"
+        app:title="@{@string/menu_payment}">
+
+    </include>
+
+    <LinearLayout
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            app:adapter="@{presenter.mAdapter}"
+            android:layout_above="@+id/bottom"
+            android:layout_height="wrap_content">
+
+
+        </androidx.recyclerview.widget.RecyclerView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:padding="20dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Họ tên"
+                android:textSize="13sp"
+                android:layout_height="wrap_content">
+
+            </androidx.appcompat.widget.AppCompatTextView>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:text="@{presenter.userName}"
+                android:enabled="false"
+
+                android:textColor="@color/black1"
+                android:textSize="13sp"
+                android:layout_height="wrap_content">
+
+            </androidx.appcompat.widget.AppCompatEditText>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Số điện thoại"
+                android:textSize="13sp"
+                android:layout_height="wrap_content">
+
+            </androidx.appcompat.widget.AppCompatTextView>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:text="@{presenter.totalPrice}"
+                android:enabled="false"
+                android:textStyle="bold"
+                android:textColor="@color/red"
+                android:textSize="13sp"
+                android:layout_height="wrap_content">
+
+            </androidx.appcompat.widget.AppCompatEditText>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:background="@drawable/button"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/white"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:text="Thanh Toán"
+        android:onClick="@{v -> presenter.payment()}"
+        android:layout_height="wrap_content">
+
+    </androidx.appcompat.widget.AppCompatButton>
+</RelativeLayout>
+</layout>
