@@ -8,6 +8,8 @@ public interface ConfigUrl {
     String URL_PATIENT = URL_API + "/patient";
     String URL_PATIENT_FORM = URL_PATIENT + "/form";
     String URL_DATA_PAYMENT = URL_PATIENT + "/payment";
+    String URL_PAYMENT_HIST = URL_DATA_PAYMENT + "/histories";
+
 
     //doctor
     String URL_DOCTOR = URL_API + "/doctor";
@@ -25,6 +27,7 @@ public interface ConfigUrl {
 
     // phieu kham benh
     String URL_PHIEU_KHAM = URL_API + "/phieu-kham";
+    String URL_LICH_KHAM = URL_PATIENT + "/lich-kham";
     //    String URL_GET_IOD_BY_DEPT =  + "/get-by-dept";
 
     //chi dinh kham

@@ -7,6 +7,7 @@ import com.hust.medtech.data.dto.PatientDTO;
 import com.hust.medtech.data.dto.ProcessOfTreatmentDTO;
 import com.hust.medtech.data.entity.Account;
 import com.hust.medtech.data.entity.response.ResponseDataPOT;
+import com.hust.medtech.repository.POTRepository;
 import com.hust.medtech.security.CustomUserDetails;
 import com.hust.medtech.security.JwtTokenProvider;
 import com.hust.medtech.service.POTService;
@@ -18,10 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PatientController {
@@ -41,6 +39,12 @@ public class PatientController {
     public BaseResponse addRegister(@RequestBody ProcessOfTreatmentDTO dataPOT) {
         String patientName = SecurityContextHolder.getContext().getAuthentication().getName();
         return potService.addPOT(dataPOT, patientName);
+    }
+
+    @GetMapping(path = ConfigUrl.URL_LICH_KHAM)
+    public BaseResponse addRegister() {
+        String patientName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return potService.getDataMedical(patientName);
     }
 
 

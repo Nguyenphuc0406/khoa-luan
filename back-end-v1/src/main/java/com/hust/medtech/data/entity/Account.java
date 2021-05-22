@@ -53,9 +53,11 @@ public class Account {
     @Column(name = "CODE")
     private String code;
 
-    @OneToOne(mappedBy = "account",fetch = FetchType.LAZY)
-    private Patient patient;
+    @Column(name = "GENDER")
+    private String gender;
 
+    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
+    private Patient patient;
 
 
 }

@@ -20,6 +20,7 @@ public class TransactionMedicalDTO {
     private Date createDate;
     //    private AccountDTO account;
     private String patientName;
+    private int potId;
 //    private String doctorName;
     private List<Integer> itemOfDepts = new ArrayList<>();
 //    private List<TransactionMedicalDetailDTO> transMedDetails;

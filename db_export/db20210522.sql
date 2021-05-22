@@ -34,6 +34,7 @@ CREATE TABLE `account` (
   `phone_number` varchar(255) DEFAULT NULL,
   `role` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
+  `gender` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`account_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -44,7 +45,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'2021-05-15','BS-01','Nguyen Hoang Anh','123456788','BS khoa noi','Viet Nam','$2y$12$g1CkXMJE5nYkGv8Msq3NOOKZnW8l0tEfSyLVtQsBTjJqWF6lRrzY6','0989788789','ROLE_ADMIN','hoanganh'),(2,'1977-01-01',NULL,'Hoang Thu Hang','174568596','Giao vien','Viet Nam','$2a$10$QmSBc9bd1SpcqnVmtdFmNOPDubfPp/IKW7zr09U42YoDs1WZz2b1O','0123456789','ROLE_USER','thuhang'),(3,'1977-01-01',NULL,'Nguyen Ngoc Linh','174568596','Giao vien','Viet Nam','$2a$10$tDr.vIcSxWswNlb6cXiGGud8xRh2Xf6n8sXS8szL.LFJ8pwkO2CRW','0123456789','ROLE_USER','ngoclinh'),(4,'1977-01-01','BS_A12','Hoang Hung Anh','174568596','Bac si','Viet Nam','$2a$10$LwMNLidec8b0MdVB9wAJ3ukZkm/0TdRdHNp.EEOm9YEV1h2HkQNzS','0123456789','ROLE_ADMIN','hunganh');
+INSERT INTO `account` VALUES (1,'2021-05-15','BS-01','Nguyen Hoang Anh','123456788','BS khoa noi','Viet Nam','$2y$12$g1CkXMJE5nYkGv8Msq3NOOKZnW8l0tEfSyLVtQsBTjJqWF6lRrzY6','0989788789','ROLE_ADMIN','hoanganh','male'),(2,'1977-01-01','BN_001','Hoang Thu Hang','174568596','Giao vien','Viet Nam','$2a$10$QmSBc9bd1SpcqnVmtdFmNOPDubfPp/IKW7zr09U42YoDs1WZz2b1O','0123456789','ROLE_USER','thuhang','female'),(3,'1977-01-01','BN_002','Nguyen Ngoc Linh','174568596','Giao vien','Viet Nam','$2a$10$tDr.vIcSxWswNlb6cXiGGud8xRh2Xf6n8sXS8szL.LFJ8pwkO2CRW','0123456789','ROLE_USER','ngoclinh','female'),(4,'1977-01-01','BS_A12','Hoang Hung Anh','174568596','Bac si','Viet Nam','$2a$10$LwMNLidec8b0MdVB9wAJ3ukZkm/0TdRdHNp.EEOm9YEV1h2HkQNzS','0123456789','ROLE_ADMIN','hunganh','male');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -149,6 +150,7 @@ CREATE TABLE `patient` (
   `account_id` int DEFAULT NULL,
   `age` int DEFAULT NULL,
   `permanent_address` varchar(255) DEFAULT NULL,
+  `health_insurance` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`patient_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -159,7 +161,7 @@ CREATE TABLE `patient` (
 
 LOCK TABLES `patient` WRITE;
 /*!40000 ALTER TABLE `patient` DISABLE KEYS */;
-INSERT INTO `patient` VALUES (1,2,45,'Dong Da, Ha Noi'),(2,3,29,'Dong Da, Ha Noi');
+INSERT INTO `patient` VALUES (1,2,45,'Dong Da, Ha Noi',NULL),(2,3,29,'Dong Da, Ha Noi',NULL);
 /*!40000 ALTER TABLE `patient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -176,6 +178,8 @@ CREATE TABLE `payment` (
   `total_price` int DEFAULT NULL,
   `patient_id` int NOT NULL,
   `trans_medical_id` int DEFAULT NULL,
+  `payment_code` varchar(25) DEFAULT NULL,
+  `payment_time` datetime DEFAULT NULL,
   PRIMARY KEY (`payment_id`),
   KEY `FK8t7hyujfhrl2jneu9jayv89tq` (`patient_id`),
   KEY `FK84sk1yf7mmp8kmho7yr5cf020` (`trans_medical_id`),
@@ -190,7 +194,7 @@ CREATE TABLE `payment` (
 
 LOCK TABLES `payment` WRITE;
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
-INSERT INTO `payment` VALUES ('0e63ac8f-fc4b-46d1-871f-6f633b2878cc',0,11000,2,5);
+INSERT INTO `payment` VALUES ('0e63ac8f-fc4b-46d1-871f-6f633b2878cc',0,11000,2,5,'BKHD1796',NULL);
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -227,6 +231,7 @@ DROP TABLE IF EXISTS `process_of_treatment`;
 CREATE TABLE `process_of_treatment` (
   `pot_id` int NOT NULL AUTO_INCREMENT,
   `date_of_examination` datetime(6) DEFAULT NULL,
+  `code` varchar(45) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `patient_id` int NOT NULL,
   PRIMARY KEY (`pot_id`),
@@ -241,7 +246,7 @@ CREATE TABLE `process_of_treatment` (
 
 LOCK TABLES `process_of_treatment` WRITE;
 /*!40000 ALTER TABLE `process_of_treatment` DISABLE KEYS */;
-INSERT INTO `process_of_treatment` VALUES (1,'2021-05-15 10:21:58.555000','Toi kham da',2),(2,'2021-05-15 20:17:50.876000','fbnnja',2),(3,'2021-05-15 20:20:12.130000','sxc',2),(4,'2021-05-15 20:23:35.118000','chjn',2),(5,'2021-05-16 15:12:12.324000','Toi kham da',2);
+INSERT INTO `process_of_treatment` VALUES (1,'2021-05-15 10:21:58.555000','ALCL1302','Toi kham da',2),(2,'2021-05-15 20:17:50.876000','BNLS1093','fbnnja',2),(3,'2021-05-15 20:20:12.130000','HKFD3452','sxc',2),(4,'2021-05-15 20:23:35.118000','BLSE7834','chjn',2),(5,'2021-05-16 15:12:12.324000','SFMG4092','Toi kham da',2);
 /*!40000 ALTER TABLE `process_of_treatment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -333,4 +338,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-17 22:21:50
+-- Dump completed on 2021-05-22 11:20:42

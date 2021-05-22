@@ -3,6 +3,6 @@
     <string name="app_title">MEDICAL TECH</string>
     <string name="menu_register">Đăng kí khám bệnh</string>
     <string name="menu_payment">Thanh toán</string>
-    <string name="menu_info">Giới thiệu</string>
+    <string name="menu_info">Lịch trình khám</string>
     <string name="menu_request_med">Tạo yêu cầu khám bệnh</string>
 </resources>

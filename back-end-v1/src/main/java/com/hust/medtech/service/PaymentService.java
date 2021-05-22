@@ -7,5 +7,9 @@ import com.hust.medtech.data.request.PaymentRequest;
 public interface PaymentService {
     BaseResponse getDataPayment(String token);
 
-    BaseResponse payment(PaymentRequest paymentDTO,String username);
+    BaseResponse payment(PaymentRequest paymentDTO, String username);
+
+    BaseResponse getPaymentHistory();
+
+    BaseResponse getPaymentDetailByCode(String code);
 }

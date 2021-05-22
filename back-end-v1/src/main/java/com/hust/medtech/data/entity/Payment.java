@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -17,8 +18,8 @@ import javax.persistence.*;
 public class Payment {
     @Id
     @Column(name = "PAYMENT_ID")
-    @GeneratedValue( generator = "uuid2" )
-    @GenericGenerator( name = "uuid2", strategy = "uuid2" )
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
     private String paymentId;
 
     @Column(name = "OUTPATIENT_COST")
@@ -26,6 +27,12 @@ public class Payment {
 
     @Column(name = "TOTAL_PRICE")
     private int totalPrice;
+
+    @Column(name = "payment_code")
+    private String paymentCode;
+
+    @Column(name = "PAYMENT_TIME")
+    private LocalDateTime paymentTime;
 
     @JoinColumn(name = "PATIENT_ID")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

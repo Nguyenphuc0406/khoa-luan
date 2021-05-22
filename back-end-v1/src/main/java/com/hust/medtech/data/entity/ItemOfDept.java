@@ -41,6 +41,7 @@ public class ItemOfDept {
     @JoinColumn(name = "DEPT_ID")
     private Dept dept;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "transDetailId.itemOfDeptId",fetch = FetchType.LAZY)
     private List<TransactionMedicalDetail> transactionMedicalDetails;
 

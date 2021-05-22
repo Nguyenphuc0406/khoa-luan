@@ -8,6 +8,8 @@ import com.hust.medtech.config.MsgRespone;
 import com.hust.medtech.data.dto.ItemOfDeptDTO;
 import com.hust.medtech.data.dto.TransactionMedicalDTO;
 import com.hust.medtech.data.entity.*;
+import com.hust.medtech.data.entity.key.ProcessOfTreatmentDetailID;
+import com.hust.medtech.data.entity.key.TransactionMedicalDetailID;
 import com.hust.medtech.data.entity.response.DataPayment;
 import com.hust.medtech.repository.*;
 import com.hust.medtech.security.JwtTokenProvider;
@@ -20,9 +22,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -44,55 +48,68 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
     @Autowired
     AccountRepository accountRepository;
     @Autowired
+    ProcessOfTreatmentRepository processOfTreatmentRepository;
+    @Autowired
+    POTDetailRepository potDetailRepository;
+    @Autowired
     JwtTokenProvider tokenProvider;
 
     // danh cho BS dang ky chi muc
+    @Transactional(rollbackOn = Exception.class)
     @Override
-    public BaseResponse addTransMedical(TransactionMedicalDTO transMedicalDTO, String token) {
-        if (transMedicalDTO != null && transMedicalDTO.getItemOfDepts() != null) {
-            // kiem tra tai khoan nguoi dung
-            Account accPatientCheck = accountRepository.findByUsername(transMedicalDTO.getPatientName());
-            if (accPatientCheck != null) {
-                String accNameByToken = tokenProvider.getUserNameFromJWT(token);
-                LOGGER.info("Bac sy " + accNameByToken + " dang tao phieu kham");
-                // get Doctor by token
-                // BS can login
-                Account accDoctor = accountRepository.findByUsername(accNameByToken);
-                Doctor doctorC = doctorRepository.findByAccount(accDoctor);
-
-                Patient patientC = patientRepository.findByAccount_AccountId(accPatientCheck.getAccountId());
-                TransactionMedical transactionMedical = TransactionMedical.builder()
-                        .createDate(new Date())
-                        .doctor(doctorC)
-                        .status(1)
-                        .patient(patientC).build();
-                TransactionMedical medical = medicalRepository.save(transactionMedical);
-                LOGGER.info("BS " + accDoctor.getUsername() + " tao don kham cho benh nhan " + accPatientCheck.getUsername() + " thanh cong");
-                List<TransactionMedicalDetail> details = new ArrayList<>();
-                for (Integer i : transMedicalDTO.getItemOfDepts()) {
-//                    details.add(new TransactionMedicalDetail(new TransactionMedicalDetailID(medical, i)));
-                }
-                medicalDetailRepository.saveAll(details);
-                LOGGER.info("Luu du lieu phieu kham thanh cong cho benh nhan " + accPatientCheck.getUsername());
-                return new OkResponse(MsgRespone.TAO_PHIEU_KHAM_THANH_CONG);
-            } else {
-                return new NotFoundResponse(MsgRespone.PATIENT_NOT_FOUND);
-            }
-
-
-        } else {
-            return new BadResponse(MsgRespone.TAO_PHIEU_KHAM_THAT_BAI);
+    public BaseResponse addTransMedical(TransactionMedicalDTO transMedicalDTO, String doctorName) {
+        Doctor doctor = doctorRepository.findByAccount_Username(doctorName);
+        if (doctor == null) {
+            return new NotFoundResponse("Không tìm thấy thông tin bác sĩ");
         }
+        Optional<ProcessOfTreatment> ofTreatment = processOfTreatmentRepository.findById(transMedicalDTO.getPotId());
+        if (!ofTreatment.isPresent()) {
+            return new NotFoundResponse("Không tìm thấy thông tin giao dịch khám của bệnh nhân!");
+        }
+        Patient patient = ofTreatment.get().getPatientPot();
+        TransactionMedical transactionMedical = TransactionMedical.builder()
+                .createDate(new Date())
+                .doctor(doctor)
+                .status(1)
+                .patient(patient).build();
+        List<TransactionMedicalDetail> details = new ArrayList<>();
+        for (Integer i : transMedicalDTO.getItemOfDepts()) {
+            Optional<ItemOfDept> item = iodRepository.findById(i);
+            if (!item.isPresent()) {
+                continue;
+            }
+            LOGGER.info("Oki");
+            details.add(new TransactionMedicalDetail(new
+                    TransactionMedicalDetailID(transactionMedical, item.get())));
+        }
+        transactionMedical.setTransactionMedicalDetails(
+                details
+        );
+        ProcessOfTreatmentDetailID kProcessOfTreatmentDetailID = new ProcessOfTreatmentDetailID();
+        kProcessOfTreatmentDetailID.setDeptId(doctor.getDeptDoctor());
+        kProcessOfTreatmentDetailID.setPotId(ofTreatment.get());
+
+        Optional<ProcessOfTreatmentDetail> processOfTreatmentDetail = potDetailRepository
+                .findById(kProcessOfTreatmentDetailID);
+        if(processOfTreatmentDetail.isPresent()){
+            ProcessOfTreatmentDetail p = processOfTreatmentDetail.get();
+            p.setAccStatus(1);
+//            todo notify last 3 account
+            potDetailRepository.save(p);
+        }
+        medicalRepository.save(transactionMedical);
+
+        return new OkResponse(MsgRespone.TAO_PHIEU_KHAM_THANH_CONG);
     }
 
     @Override
     public BaseResponse getTotalPayment(String userName) {
-        Pageable paging = PageRequest.of(0,1);
+        Pageable paging = PageRequest.of(0, 1);
         Page<TransactionMedical> transactionMedical = medicalRepository.
-                _getTransByUserAnDate(userName,paging);
+                _getTransByUserAnDate(userName, paging);
 
-        if(transactionMedical == null || transactionMedical.getContent() == null
-        || transactionMedical.getContent().isEmpty()){
+        if (transactionMedical == null || transactionMedical.getContent() == null
+                || transactionMedical.getContent().isEmpty()) {
             return new NotFoundResponse("Ban khog co giao dich nao");
         }
         List<ItemOfDeptDTO> itemOfDepts = new ArrayList<>();

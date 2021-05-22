@@ -16,10 +16,14 @@ import com.mservice.shared.constants.RequestType;
 import com.mservice.shared.sharedmodels.Environment;
 import com.mservice.shared.sharedmodels.PartnerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -67,11 +71,23 @@ public class MedtechApplication {
     public static Double VERSION = 2.0;
     public static Integer APP_PAY_TYPE = 3;
 
+
     public static void main(String[] args) {
         SpringApplication.run(MedtechApplication.class, args);
 
 
+    }
 
+    @Bean
+    public WebMvcConfigurer configurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedMethods("*")
+                        .allowedOrigins("*");
+            }
+        };
     }
 
     public static String generateRSA(String phoneNumber,

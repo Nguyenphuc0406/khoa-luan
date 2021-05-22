@@ -25,15 +25,14 @@ public class TransactionMedical {
     @Column(name = "CREATE_DATE")
     private Date createDate;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DOCTOR_ID")
     private Doctor doctor;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "PATIENT_ID")
     private Patient patient;
+
     @OneToMany(mappedBy = "transDetailId.transactionMedical",fetch = FetchType.LAZY)
     private List<TransactionMedicalDetail> transactionMedicalDetails;
 

@@ -3,6 +3,7 @@ package com.hust.medtech.security;
 
 import com.hust.medtech.service.impl.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +17,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements ApplicationContextAware {
-
+    @Value("${environment.name}")
+    private  String profile;
     @Autowired
     AccountServiceImpl accountService;
 
@@ -56,6 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements A
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        System.out.println("PHUC "+profile);
         http.csrf().disable(); // config loi 403
 
         http.cors(); // Ngăn chặn request từ một domain khác
@@ -64,11 +69,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements A
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/getUserInfo").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/getNews").permitAll();
 //        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/doctor/**").access("hasRole('ADMIN')");
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/doctor/**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/doctor/**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/phieu-kham").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/doctor/**").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/doctor/**").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/phieu-kham").access("hasRole('USER')");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/patient/**").permitAll();
-
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/patient/**").access("hasRole('USER')");
+        http.csrf().disable().authorizeRequests().and().logout().logoutUrl("/logout").permitAll();
 
         http.authorizeRequests().anyRequest().authenticated(); // Tất cả các request khác đều cần phải xác thực mới được
         // truy cập

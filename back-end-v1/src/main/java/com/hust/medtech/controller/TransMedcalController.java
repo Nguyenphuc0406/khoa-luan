@@ -15,8 +15,9 @@ public class TransMedcalController {
     TransactionMedicalService transMedService;
 
     @PostMapping(path = ConfigUrl.URL_CHI_DINH_KHAM)
-    public BaseResponse addTransMed(@RequestBody TransactionMedicalDTO transactionMedicalDTO, @RequestHeader("accept-token") String token) {
-        return transMedService.addTransMedical(transactionMedicalDTO, token);
+    public BaseResponse addTransMed(@RequestBody TransactionMedicalDTO transactionMedicalDTO) {
+        String doctorName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return transMedService.addTransMedical(transactionMedicalDTO, doctorName);
     }
 
     @GetMapping(path = ConfigUrl.URL_CHI_DINH_KHAM_GET_ID)

@@ -25,4 +25,6 @@ public class TransactionMedicalDetailID implements Serializable {
     @ManyToOne
     @JoinColumn(name = "item_of_dept_id")
     private ItemOfDept itemOfDeptId;
+
+
 }

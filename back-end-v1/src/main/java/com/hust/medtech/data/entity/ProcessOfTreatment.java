@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,12 +23,19 @@ public class ProcessOfTreatment {
     private int potId;
 
     @Column(name = "DATE_OF_EXAMINATION")
-    private LocalDateTime dateOfExamination;
+    private Date dateOfExamination;
 
     @Column(name = "DESCRIPTION")
     private String description;
 
+    @Column(name = "CODE")
+    private String code;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "PATIENT_ID")
     private Patient patientPot;
+
+    @OneToMany(mappedBy = "processDetailId.potId",fetch = FetchType.LAZY)
+    private List<ProcessOfTreatmentDetail> processOfTreatmentDetails;
+
 }

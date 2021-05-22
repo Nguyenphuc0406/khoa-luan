@@ -42,14 +42,15 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     public ObservableField<String> userName;
     public ObservableField<String> totalPrice;
     private List<Item> data;
-    private int amount ;
-    private int transId ;
+    private int amount;
+    private int transId;
     private String fee = "0";
     int environment = 0;//developer default
     private String merchantName = "MOMOLB5S20210516 MedTech";
     private String merchantCode = "MOMOLB5S20210516";
     private String merchantNameLabel = "Nhà cung cấp";
     private String description = "Thanh toán viện phí";
+
     @Override
     public int layoutId() {
         return R.layout.activity_payment;
@@ -58,8 +59,8 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     @Override
     public void initData() {
         data = new ArrayList<>();
-        userName= new ObservableField<>();
-        totalPrice= new ObservableField<>();
+        userName = new ObservableField<>();
+        totalPrice = new ObservableField<>();
         mAdapter = new ObservableField<>(new BaseRecyclerview<>(this, data, R.layout.item_payment));
         mBinding.setPresenter(this);
         getDataPayment(DataUtils.getToken(this));
@@ -72,24 +73,23 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     public void payment() {
         requestPayment();
     }
+
     public void requestPayment() {
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
-
-
 
         Map<String, Object> eventValue = new HashMap<>();
         //client Required
         eventValue.put(MoMoParameterNamePayment.MERCHANT_NAME, merchantName);
         eventValue.put(MoMoParameterNamePayment.MERCHANT_CODE, merchantCode);
-        eventValue.put(MoMoParameterNamePayment.AMOUNT, amount+"");
+        eventValue.put(MoMoParameterNamePayment.AMOUNT, amount + "");
         eventValue.put(MoMoParameterNamePayment.DESCRIPTION, description);
         //client Optional
         eventValue.put(MoMoParameterNamePayment.FEE, fee);
         eventValue.put(MoMoParameterNamePayment.MERCHANT_NAME_LABEL, merchantNameLabel);
-        String string = merchantCode+"-"+ UUID.randomUUID().toString();
-        eventValue.put(MoMoParameterNamePayment.REQUEST_ID,  string);
-        Log.d("REQUEST_ID",string);
+        String string = merchantCode + "-" + UUID.randomUUID().toString();
+        eventValue.put(MoMoParameterNamePayment.REQUEST_ID, string);
+        Log.d("REQUEST_ID", string);
         eventValue.put(MoMoParameterNamePayment.PARTNER_CODE, "MOMOLB5S20210516");
 
 //        JSONObject objExtraData = new JSONObject();
@@ -112,20 +112,21 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
         AppMoMoLib.getInstance().requestMoMoCallBack(this, eventValue);
     }
 
-    private void getDataPayment(String token){
+    // lay thong tin gia + ten cac chi muc kham truoc khi thanh toan
+    private void getDataPayment(String token) {
         MedTedInstance.getInstance().getTotalPayment(token)
                 .enqueue(new Callback<GetTotalPaymentResponse>() {
                     @Override
                     public void onResponse(Call<GetTotalPaymentResponse> call, Response<GetTotalPaymentResponse> response) {
-                        if(response.code() == 200){
+                        if (response.code() == 200) {
                             amount = (int) response.body().getData().getTotalPrice();
                             transId = (int) response.body().getData().getTransMedId();
-                            totalPrice.set(response.body().getData().getTotalPrice()+"");
+                            totalPrice.set(response.body().getData().getTotalPrice() + "");
                             userName.set(response.body().getData().getNamePatient());
                             data.addAll(response.body().getData().getItemOfDepts());
                             mAdapter.notifyChange();
-                        }else {
-                            onFailure(null,null);
+                        } else {
+                            onFailure(null, null);
                         }
                     }
 
@@ -136,13 +137,14 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
                 });
     }
 
-    private void  payment(String token,String phone){
+    //goi api thanh toan toi server app
+    private void payment(String token, String phone) {
         PaymentRequest request = new PaymentRequest();
         request.setPhoneNumber(phone);
         request.setToken(token);
         request.setPrice(amount);
         request.setTransId(transId);
-        MedTedInstance.getInstance().payment(request,DataUtils.getToken(this))
+        MedTedInstance.getInstance().payment(request, DataUtils.getToken(this))
                 .enqueue(new Callback<EmptyResponse>() {
                     @Override
                     public void onResponse(Call<EmptyResponse> call, Response<EmptyResponse> response) {
@@ -160,28 +162,29 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
                 });
     }
 
+    // xac nhan thanh toan tu app momo, gui ve token cho app client
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
-            if(data != null) {
-                if(data.getIntExtra("status", -1) == 0) {
+        if (requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
+            if (data != null) {
+                if (data.getIntExtra("status", -1) == 0) {
 //                    tvMessage.setText("message: " + "Get token " + data.getStringExtra("message"));
 
-                    if(data.getStringExtra("data") != null && !data.getStringExtra("data").equals("")) {
+                    if (data.getStringExtra("data") != null && !data.getStringExtra("data").equals("")) {
                         // TODO:
-                        Toast.makeText(this, ""+data.getStringExtra("data"), Toast.LENGTH_SHORT).show();
-                        Log.d("TOKEN",data.getStringExtra("data"));
+                        Toast.makeText(this, "" + data.getStringExtra("data"), Toast.LENGTH_SHORT).show();
+                        Log.d("TOKEN", data.getStringExtra("data"));
 
-                        payment(data.getStringExtra("data"),data.getStringExtra("phonenumber"));
+                        payment(data.getStringExtra("data"), data.getStringExtra("phonenumber"));
 
                     } else {
 //                        tvMessage.setText("message: " + this.getString(R.string.not_receive_info));
                     }
-                } else if(data.getIntExtra("status", -1) == 1) {
-                    String message = data.getStringExtra("message") != null?data.getStringExtra("message"):"Thất bại";
+                } else if (data.getIntExtra("status", -1) == 1) {
+                    String message = data.getStringExtra("message") != null ? data.getStringExtra("message") : "Thất bại";
 //                    tvMessage.setText("message: " + message);
-                } else if(data.getIntExtra("status", -1) == 2) {
+                } else if (data.getIntExtra("status", -1) == 2) {
 //                    tvMessage.setText("message: " + this.getString(R.string.not_receive_info));
                 } else {
 //                    tvMessage.setText("message: " + this.getString(R.string.not_receive_info));

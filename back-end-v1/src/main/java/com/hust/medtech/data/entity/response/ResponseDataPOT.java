@@ -17,5 +17,8 @@ public class ResponseDataPOT {
 //    private Lis;
     private String deptRoom;
     private String doctorName;
+    private String doctorPhone;
+    private int index;
+    private int totalIndex;
 
 }

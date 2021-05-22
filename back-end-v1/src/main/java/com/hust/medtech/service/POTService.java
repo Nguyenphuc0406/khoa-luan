@@ -6,4 +6,5 @@ import com.hust.medtech.data.dto.ProcessOfTreatmentDTO;
 public interface POTService {
     BaseResponse addPOT(ProcessOfTreatmentDTO treatmentDTO, String token);
 
+    BaseResponse getDataMedical(String patientName);
 }

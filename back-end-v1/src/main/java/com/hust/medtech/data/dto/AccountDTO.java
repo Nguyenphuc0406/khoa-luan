@@ -46,6 +46,8 @@ public class AccountDTO {
 
     private String address;
 
+    private String gender;
+
     public AccountDTO(Account accountDTO) {
         accountId = accountDTO.getAccountId();
         username = accountDTO.getUsername();
@@ -58,5 +60,6 @@ public class AccountDTO {
         role = accountDTO.getRole();
         code = accountDTO.getCode();
         address = accountDTO.getPatient().getPermanentAddress();
+        gender = accountDTO.getGender();
     }
 }

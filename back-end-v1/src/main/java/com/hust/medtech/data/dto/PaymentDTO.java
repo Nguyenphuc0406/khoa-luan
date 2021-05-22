@@ -13,6 +13,7 @@ public class PaymentDTO {
     private Integer paymentId;
     private int outpatientCost;
     private int totalPrice;
+    private String paymentCode;
     private Integer patientId;
     private Integer transMedicalId;
 
