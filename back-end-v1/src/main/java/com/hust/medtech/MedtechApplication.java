@@ -89,7 +89,7 @@ public class MedtechApplication {
             }
         };
     }
-
+    // thuat toan gen mã RSA
     public static String generateRSA(String phoneNumber,
                                      String billId,
                                      String transId,

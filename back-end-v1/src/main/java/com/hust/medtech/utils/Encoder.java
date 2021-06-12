@@ -101,7 +101,7 @@ public class Encoder {
         byte[] rawHmac = mac.doFinal(value.getBytes());
         return Base64.encodeBase64String(rawHmac);
     }
-
+// thuat toan ma hoa RSA
     public static String encryptRSA(byte[] dataBytes, String publicKey) throws Exception {
         // Note: You can use java.util.Base64 instead of sun.misc.*
         PublicKey pubk;

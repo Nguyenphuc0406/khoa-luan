@@ -13,7 +13,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface AccountRepository  extends JpaRepository<Account, Integer> {
+public interface AccountRepository extends JpaRepository<Account, Integer> {
     Account findByUsername(String username);
 
     Account findByAccountId(int accountId);
@@ -21,5 +21,9 @@ public interface AccountRepository  extends JpaRepository<Account, Integer> {
     @Query("select new com.hust.medtech.data.dto.AccountDTO(a) from Account  a where a.username =?1")
     Optional<AccountDTO> _getAccountByAccountId(String username);
 
+    @Transactional
+    @Modifying
+    @Query("update Account c set c.deviceToken =?1 where c.username = ?2")
+    void setDeviceTokenByUsername(String token, String username);
 
 }

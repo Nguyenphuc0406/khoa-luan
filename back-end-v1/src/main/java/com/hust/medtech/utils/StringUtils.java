@@ -1,5 +1,10 @@
 package com.hust.medtech.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+
 import java.util.Random;
 
 public class StringUtils {
@@ -36,9 +41,15 @@ public class StringUtils {
         return r.nextInt((max - min) + 1) + min;
     }
 
-    public static void main(String[] args) {
-      System.out.println("Code : " +   randomCode());
+    public static  <T> String getBody(final T user) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(user);
     }
 
+    public static HttpHeaders getHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        return headers;
+    }
 
 }

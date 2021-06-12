@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "659606258605",
+    "project_id": "medtech-53e45",
+    "storage_bucket": "medtech-53e45.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659606258605:android:6f8e717a8231037a11d724",
+        "android_client_info": {
+          "package_name": "com.hust.medtech"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "659606258605-g61opk8mj28klpho2nul1nr96b56i1sm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hust.medtech",
+            "certificate_hash": "bc8343f64955d03f6d26663be20dde6282b5a146"
+          }
+        },
+        {
+          "client_id": "659606258605-cl0v3s8h634fe3ero3r61g50smkf9j49.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg0qT0VRoYkxw6HMylIMQmIHNpm_GdLz8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659606258605-cl0v3s8h634fe3ero3r61g50smkf9j49.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

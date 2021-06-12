@@ -1,5 +1,6 @@
 package com.hust.medtech.service.impl;
 
+import com.hust.medtech.base.request.FCMRequest;
 import com.hust.medtech.base.response.BadResponse;
 import com.hust.medtech.base.response.BaseResponse;
 import com.hust.medtech.base.response.NotFoundResponse;
@@ -20,8 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import javax.management.Notification;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
@@ -91,13 +95,52 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
 
         Optional<ProcessOfTreatmentDetail> processOfTreatmentDetail = potDetailRepository
                 .findById(kProcessOfTreatmentDetailID);
+        int currentIndexPot = -1;
         if(processOfTreatmentDetail.isPresent()){
             ProcessOfTreatmentDetail p = processOfTreatmentDetail.get();
             p.setAccStatus(1);
-//            todo notify last 3 account
+            currentIndexPot = p.getIndexNum();
+//            todo notify last 2 account
             potDetailRepository.save(p);
         }
+//        them thu n thi notify thang n+1 va n+2;
+        Pageable paging = PageRequest.of(0, 2);
+        Page<ProcessOfTreatmentDetail>  userNeedNotys =  potDetailRepository._getAccountNotifyByPotId(currentIndexPot,doctor.getDeptDoctor().getDeptId()
+        , ofTreatment.get().getPotId(),paging);
+        List<String> tokens = new ArrayList<>();
+        if(userNeedNotys != null && userNeedNotys.getContent() != null){
+
+            for (ProcessOfTreatmentDetail p : userNeedNotys.getContent()){
+                String token;
+                try {
+                    token =  p.getProcessDetailId().getPotId().getPatientPot().getAccount().getDeviceToken();
+                    if(token != null){
+                        tokens.add(token);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+            }
+        }
+        if(!tokens.isEmpty()){
+//            notifies
+            RestTemplate restTemplate = new RestTemplate();
+            FCMRequest request = new FCMRequest();
+
+            request.registration_ids = tokens;
+            FCMRequest.Notification notification = new FCMRequest.Notification();
+            notification.title = "Thông báo từ MedTech";
+            notification.body = "Sắp đến thứ tự khám của bạn. vui lòng chuẩn bị.";
+            request.notification = notification;
+            ResponseEntity<String> response
+                    = restTemplate.postForEntity("https://fcm.googleapis.com/fcm/send",request, String.class);
+
+
+        }
         medicalRepository.save(transactionMedical);
+
 
         return new OkResponse(MsgRespone.TAO_PHIEU_KHAM_THANH_CONG);
     }

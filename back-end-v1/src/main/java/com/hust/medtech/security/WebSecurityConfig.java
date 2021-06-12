@@ -73,6 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements A
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/doctor/**").access("hasRole('ADMIN')");
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/phieu-kham").access("hasRole('USER')");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/patient/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/device").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/patient/**").access("hasRole('USER')");
         http.csrf().disable().authorizeRequests().and().logout().logoutUrl("/logout").permitAll();
 

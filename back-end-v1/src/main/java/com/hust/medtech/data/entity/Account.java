@@ -56,6 +56,9 @@ public class Account {
     @Column(name = "GENDER")
     private String gender;
 
+    @Column(name = "DEVICE_TOKEN")
+    private String deviceToken;
+
     @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
     private Patient patient;
 

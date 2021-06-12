@@ -121,6 +121,11 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setPaymentCode(StringUtils.randomCode());
         payment.setPaymentTime(dateTime);
         String publicKey = "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtSkmOBp4OBfHuHBXBK717mF4sp0j6yrawuq0dvRlaeuOG/6rXazFxmrMWlRRuHJkQtsuC/yqgX7RZfOdzkgqomc/PeSTtz3pbjPkk93y+XTeiisvdZC4wNonGiossSUl8ZvksRBaLope18WCyBioEzNYpz7jjFFCEuzsH5GKjx9StOgMSxESQfxif0Y6RswPqWnx/ydkVEqLCbm37qhRKLjDp7ZWWJMKvq/Gy5VTE0i2afDHb7UPtnkRm3WF/aUsmJzZp83QWXWVVCcMuMzoahBoXFFNm+RSxioTC4+An2oMMn6lXHMtKUUPhMvoyzcPEkc3UnRORfKIbhTAfxipgeV8ZH2jR3WbP8dC6ucdGYlOYXTRM0pEjxPt8TSVX2V7QJgdiqlwxhZU3eZZ3a0ZhyXSId4y0oUS0xAgpJSyAmNKczTEap2jau19tfF71wHPSx/0AIG6l1LMoxN6H/wYjpN/e+GGILLdKkEoBiVVNljgOUpQkRlOzNmAQATHUbYgVcjFcSOr+Jc2zYwOEIe13PnOPof+oGUktR4Ozts86tZFHBFtEhkeeg4e9AihMoTRcmyqllXp6lYmpFb2kH8mB5ll95V12YmhCuEcNpsHeAWYfQsbEKuD52UALuem3ZfkoIlEjL1EXZz3NJZU/ML71LXoHiMmui3RzCL66xMu6FMCAwEAAQ==";
+
+        /* accessKey - key cấp quyền truy cập vào server momo
+        secretKey - key để tạo chữ ký số
+         *
+         */
         PartnerInfo devInfo = new PartnerInfo("MOMOLB5S20210516",
                 "TNWFx9JWayevKPiB8LyTgODiCSrjstXN",
                 "OWepCRJMf4Vo7M0eHlcuRI2uKTrZz9Ce");
