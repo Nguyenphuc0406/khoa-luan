@@ -24,11 +24,10 @@ public interface POTDetailRepository extends JpaRepository<ProcessOfTreatmentDet
             "  and DATE(DATE_FORMAT(date_of_examination, '%Y-%m-%d')) = CURDATE()", nativeQuery = true)
     List<Object[]> _getCountNumberDept(int deptId);
 
-    @Query("select p from ProcessOfTreatmentDetail p where p.indexNum > :currentNum and p.processDetailId.deptId = :deptId " +
-            " and p.processDetailId.potId > :potCurrent and p.accStatus = 0 order by p.indexNum asc")
+    @Query("select p from ProcessOfTreatmentDetail p where p.indexNum > :currentNum and p.processDetailId.deptId.deptId = :deptId " +
+            " and p.processDetailId.potId.potId > :potCurrent and p.accStatus = 0 order by p.indexNum asc")
     Page<ProcessOfTreatmentDetail> _getAccountNotifyByPotId(@Param("currentNum") int currentNum,
                                                             @Param("deptId")int deptId,   @Param("potCurrent") int potCurrent,
                                                             Pageable pageable);
-
 
 }

@@ -75,7 +75,7 @@ public class RequestStep3Fragment extends BaseFragment<FragmentRequestStep3Bindi
                             data.addAll(response.body().getData());
                             mAdapter.notifyChange();
                         } else {
-                            onFailure(null, null);
+                            Toast.makeText(getContext(), "Fail ", Toast.LENGTH_SHORT).show();
                         }
                     }
 

@@ -24,6 +24,20 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements ApplicationContextAware {
+    private static final String[] AUTH_WHITELIST = {
+            // -- Swagger UI v2
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            // -- Swagger UI v3 (OpenAPI)
+            "/v3/api-docs/**",
+            "/swagger-ui/**"};
+    // other public endpoints of your API may be appended to this array
+
     @Value("${environment.name}")
     private  String profile;
     @Autowired
@@ -60,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements A
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        System.out.println("PHUC "+profile);
+
         http.csrf().disable(); // config loi 403
 
         http.cors(); // Ngăn chặn request từ một domain khác
@@ -75,6 +89,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements A
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/patient/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/device").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/patient/**").access("hasRole('USER')");
+
+        http.authorizeRequests().
+                antMatchers(AUTH_WHITELIST).permitAll().  // whitelist Swagger UI resources
+                // ... here goes your custom security configuration
+                        antMatchers("/**").authenticated();
         http.csrf().disable().authorizeRequests().and().logout().logoutUrl("/logout").permitAll();
 
         http.authorizeRequests().anyRequest().authenticated(); // Tất cả các request khác đều cần phải xác thực mới được

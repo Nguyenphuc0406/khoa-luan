@@ -18,4 +18,8 @@ public abstract class BaseActivity<M extends ViewDataBinding,P> extends AppCompa
 
     public abstract int layoutId();
     public abstract void initData();
+
+    public void onCancel(){
+        finish();
+    }
 }

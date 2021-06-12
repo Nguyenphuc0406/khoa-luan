@@ -17,11 +17,20 @@ import com.hust.medtech.security.JwtTokenProvider;
 import com.hust.medtech.service.AccountService;
 import com.hust.medtech.service.impl.AccountServiceImpl;
 import com.hust.medtech.utils.StringUtils;
+import com.hust.medtech.utils.SwaggerExampleRequest;
+import com.hust.medtech.utils.SwaggerExampleResponse;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -29,10 +38,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,6 +52,7 @@ import java.util.List;
 import java.util.Optional;
 @Slf4j
 @RestController
+@Tag(name = "Account")
 public class AccountController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -56,6 +63,33 @@ public class AccountController {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Operation(summary = "Đăng nhập với bệnh nhân hoặc bác sĩ",description = "")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation =
+                                    SwaggerExampleResponse.class),
+                            examples =
+                            @ExampleObject(value = SwaggerExampleResponse.LOGIN_RESPONSE))),
+
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema
+                    = @Schema(implementation = NotFoundResponse.class))),
+
+            @ApiResponse(responseCode = "401", description = "Forbidden", content
+                    = @Content(schema = @Schema(implementation = NotFoundResponse.class))),
+
+            @ApiResponse(responseCode = "403", description =
+                    "Forbidden", content = @Content(schema = @Schema(implementation = NotFoundResponse.class))),
+
+            @ApiResponse(responseCode = "500", description =
+                    "Internal Server Error", content = @Content(schema = @Schema(implementation = NotFoundResponse.class))) })
+
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(content = {
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    examples = @ExampleObject(value =
+                            SwaggerExampleRequest.LOGIN_REQUEST))
+    })
     @PostMapping(ConfigUrl.URL_LOGIN)
     public BaseResponse login(@Validated @RequestBody Account request) {
 
@@ -123,29 +157,7 @@ public class AccountController {
     @PostMapping("/device")
     public BaseResponse registerDeviceToken(@RequestBody Account deviceToken){
         String accountName = SecurityContextHolder.getContext().getAuthentication().getName();
-//        FCMRequest request = new FCMRequest();
-//        String toToken = deviceToken.getDeviceToken();
-//        RestTemplate restTemplate = new RestTemplate();
-//        List<String> token = new ArrayList<>();
-//        token.add(toToken);
-//        request.registration_ids = token;
-//        FCMRequest.Notification notification = new FCMRequest.Notification();
-//        notification.title = "test";
-//        notification.body = "test";
-//        request.notification = notification;
-//
-//        HttpHeaders registrationHeaders = StringUtils.getHeaders();
-//        registrationHeaders.set("Authorization", "key=AAAAmZOYw60:APA91bG8BYYUTKZ5ZKpU54sNTzR7MVx1Vp_cFgso-hVjfqBrl02MJ4yVDQZdMuJjHv6gXr3MDJAhC0jxF7xunCyegOL2WR0-lHrh_j9mGcVBn-z1ssk5ka25g90f8oZEgkKAGE2f3ZrA");
-//        try {
-//            HttpEntity<String> registrationEntity = new HttpEntity<String>(StringUtils.getBody(request),
-//                    registrationHeaders);
-//            ResponseEntity<String> response = restTemplate.exchange("https://fcm.googleapis.com/fcm/send",
-//                    HttpMethod.POST, registrationEntity,
-//                    String.class);
-//            log.info("Response===",response);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
+
         return accountService.registerDeviceToken(deviceToken.getDeviceToken(), accountName);
     }
 

@@ -7,9 +7,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.hust.medtech.R;
 import com.hust.medtech.api.MedTedInstance;
 import com.hust.medtech.api.response.GetNewsResponse;
@@ -22,6 +26,7 @@ import com.hust.medtech.screen.PaymentActivity;
 import com.hust.medtech.screen.notify.NotifyActivity;
 import com.hust.medtech.screen.requestmed.RequestMedTechActivity;
 import com.hust.medtech.screen.requestmed.fragment.RequestStep1Fragment;
+import com.hust.medtech.screen.todo.TodoCustomerActivity;
 import com.hust.medtech.utils.DataUtils;
 
 import org.json.JSONException;
@@ -55,6 +60,26 @@ private  List<Notify> strings;
         initData();
     }
     private void initData(){
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+
+                        // Log and toast
+
+                        Log.d("TOKEN : ", token);
+
+                    }
+                });
+
+
         AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT);
 
         type = new ObservableInt();
@@ -86,6 +111,9 @@ private  List<Notify> strings;
         }else  if(type ==2){
             mContext.startActivity(new Intent(mContext, PaymentActivity.class));
 //           requestPayment();
+
+        }else if( type == 3){
+            mContext.startActivity(new Intent(mContext, TodoCustomerActivity.class));
 
         }
     }

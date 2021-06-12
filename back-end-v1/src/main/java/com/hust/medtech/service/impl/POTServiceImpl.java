@@ -23,10 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.print.Doc;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class POTServiceImpl implements POTService {
@@ -56,17 +53,40 @@ public class POTServiceImpl implements POTService {
     DeptRepository deptRepository;
 
     @Override
-    public BaseResponse addPOT(ProcessOfTreatmentDTO treatmentDTO, String token) {
+    public BaseResponse addPOT(ProcessOfTreatmentDTO treatmentDTO, String patientName) {
         if (treatmentDTO != null) {
 //            String patientName = tokenProvider.getUserNameFromJWT(token);
-            Account accountParent = accountRepository.findByUsername(token);
+            Account accountParent = accountRepository.findByUsername(patientName);
             Patient patient = patientRepository.findByAccount_AccountId(accountParent.getAccountId());
-            ProcessOfTreatment process = ProcessOfTreatment.builder()
-                    .description(treatmentDTO.getDescription())
-                    .dateOfExamination(new Date())
-                    .code(StringUtils.randomCode())
-                    .patientPot(patient).build();
-            potRepository.save(process);
+
+            Pageable paging = PageRequest.of(0, 1);
+            Page<ProcessOfTreatment> pageData = potRepository
+                    ._getProcessByUsernameAndDay(patientName, paging);
+            ProcessOfTreatment process;
+            if (pageData != null && pageData.getContent() != null && !pageData.getContent().isEmpty()) {
+                process = pageData.getContent().get(0);
+                process.getProcessOfTreatmentDetails();
+                Map<String,String> mapDept = new HashMap<>();
+                for (ProcessOfTreatmentDetail processOfTreatmentDetail :  process.getProcessOfTreatmentDetails()){
+                    String key = processOfTreatmentDetail.getProcessDetailId().getDeptId().getDeptId()+"";
+                    mapDept.put(key,processOfTreatmentDetail.getProcessDetailId().getDeptId().getName());
+                }
+                for(Integer i : treatmentDTO.getDepts()){
+                    if(mapDept.containsKey(i+"")){
+                        return new BadResponse("Bạn đã đăng kí "+mapDept.get(i+"")+" trong hôm nay. và không được đăng kí lại.");
+                    }
+                }
+
+            }else {
+                 process = ProcessOfTreatment.builder()
+                        .description(treatmentDTO.getDescription())
+                        .dateOfExamination(new Date())
+                        .code(StringUtils.randomCode())
+                        .patientPot(patient).build();
+                potRepository.save(process);
+            }
+
+
             // ghi cac giao dich vao ban ghi
             List<ProcessOfTreatmentDetail> details = new ArrayList<>();
             for (Integer i : treatmentDTO.getDepts()) {
@@ -145,6 +165,7 @@ public class POTServiceImpl implements POTService {
             int indexNum = Integer.parseInt(count.get(0)[0].toString());
             list.add(ResponseDataPOT.builder()
                     .deptRoom(process.getProcessDetailId().getDeptId().getAddress())
+                    .deptName(process.getProcessDetailId().getDeptId().getName())
                     .doctorName(doctor.getAccount().getFullName())
                     .doctorPhone(doctor.getAccount().getPhoneNumber())
                     .index(process.getIndexNum())

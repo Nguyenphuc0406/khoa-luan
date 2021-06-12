@@ -9,6 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MedTedInstance {
 
     static final String BASE_URL = "https://medtechvn.herokuapp.com";
+//    static final String BASE_URL = "http://192.168.1.105:8082";
     private static volatile MedTedAPI instance;
 
     public static MedTedAPI getInstance() {

@@ -1,5 +1,6 @@
 package com.hust.medtech.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hust.medtech.base.request.FCMRequest;
 import com.hust.medtech.base.response.BadResponse;
 import com.hust.medtech.base.response.BaseResponse;
@@ -15,12 +16,16 @@ import com.hust.medtech.data.entity.response.DataPayment;
 import com.hust.medtech.repository.*;
 import com.hust.medtech.security.JwtTokenProvider;
 import com.hust.medtech.service.TransactionMedicalService;
+import com.hust.medtech.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -126,16 +131,29 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
         }
         if(!tokens.isEmpty()){
 //            notifies
-            RestTemplate restTemplate = new RestTemplate();
             FCMRequest request = new FCMRequest();
+        RestTemplate restTemplate = new RestTemplate();
 
-            request.registration_ids = tokens;
-            FCMRequest.Notification notification = new FCMRequest.Notification();
-            notification.title = "Thông báo từ MedTech";
-            notification.body = "Sắp đến thứ tự khám của bạn. vui lòng chuẩn bị.";
-            request.notification = notification;
-            ResponseEntity<String> response
-                    = restTemplate.postForEntity("https://fcm.googleapis.com/fcm/send",request, String.class);
+        request.registration_ids = tokens;
+        FCMRequest.Notification notification = new FCMRequest.Notification();
+        notification.title = "test";
+        notification.body = "test";
+        request.notification = notification;
+
+        HttpHeaders registrationHeaders = StringUtils.getHeaders();
+        registrationHeaders.set("Authorization", "key=AAAAmZOYw60:APA91bG8BYYUTKZ5ZKpU54sNTzR7MVx1Vp_cFgso-hVjfqBrl02MJ4yVDQZdMuJjHv6gXr3MDJAhC0jxF7xunCyegOL2WR0-lHrh_j9mGcVBn-z1ssk5ka25g90f8oZEgkKAGE2f3ZrA");
+        try {
+            HttpEntity<String> registrationEntity = new HttpEntity<String>(StringUtils.getBody(request),
+                    registrationHeaders);
+            ResponseEntity<String> response = restTemplate.exchange("https://fcm.googleapis.com/fcm/send",
+                    HttpMethod.POST, registrationEntity,
+                    String.class);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+
 
 
         }
