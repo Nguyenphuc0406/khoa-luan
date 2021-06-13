@@ -169,6 +169,7 @@ public class POTServiceImpl implements POTService {
                     .doctorName(doctor.getAccount().getFullName())
                     .doctorPhone(doctor.getAccount().getPhoneNumber())
                     .index(process.getIndexNum())
+                    .potId(process.getProcessDetailId().getPotId().getPotId())
                     .totalIndex(indexNum)
                     .build());
         }

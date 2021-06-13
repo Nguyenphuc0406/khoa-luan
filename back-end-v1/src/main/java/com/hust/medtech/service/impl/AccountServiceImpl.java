@@ -4,7 +4,9 @@ import com.hust.medtech.base.response.BadResponse;
 import com.hust.medtech.base.response.BaseResponse;
 import com.hust.medtech.base.response.OkResponse;
 import com.hust.medtech.data.entity.Account;
+import com.hust.medtech.data.entity.Notify;
 import com.hust.medtech.repository.AccountRepository;
+import com.hust.medtech.repository.NotifyRepository;
 import com.hust.medtech.security.CustomUserDetails;
 import com.hust.medtech.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AccountServiceImpl implements UserDetailsService, AccountService {
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    NotifyRepository mNotifyRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -42,5 +48,13 @@ public class AccountServiceImpl implements UserDetailsService, AccountService {
         }
 
 
+    }
+
+    @Override
+    public BaseResponse getNotifyByAccount(String accountName) {
+        Account accountCheck = accountRepository.findByUsername(accountName);
+        List<Notify> list = mNotifyRepository.findNotifyByAccountIdOrderByCreateDateAsc
+                (accountCheck.getAccountId());
+        return new OkResponse(list);
     }
 }

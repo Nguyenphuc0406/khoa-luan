@@ -161,4 +161,11 @@ public class AccountController {
         return accountService.registerDeviceToken(deviceToken.getDeviceToken(), accountName);
     }
 
+    @GetMapping("/notify")
+    public BaseResponse getNotifyByAccount(){
+        String accountName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return accountService.getNotifyByAccount(accountName);
+    }
+
 }

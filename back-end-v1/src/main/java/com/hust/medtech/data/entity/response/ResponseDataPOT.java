@@ -21,5 +21,6 @@ public class ResponseDataPOT {
     private String deptName;
     private int index;
     private int totalIndex;
+    private int potId;
 
 }

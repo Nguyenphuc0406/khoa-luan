@@ -3,6 +3,7 @@ package com.hust.medtech.controller;
 import com.hust.medtech.base.response.BaseResponse;
 import com.hust.medtech.config.ConfigUrl;
 import com.hust.medtech.data.dto.TransactionMedicalDTO;
+import com.hust.medtech.service.PaymentService;
 import com.hust.medtech.service.TransactionMedicalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class TransMedcalController {
     @Autowired
     TransactionMedicalService transMedService;
+    @Autowired
+    PaymentService paymentService;
 
     @PostMapping(path = ConfigUrl.URL_CHI_DINH_KHAM)
     public BaseResponse addTransMed(@RequestBody TransactionMedicalDTO transactionMedicalDTO) {
@@ -25,5 +28,12 @@ public class TransMedcalController {
         String patientName = SecurityContextHolder.getContext().getAuthentication().getName();
         return transMedService.getTotalPayment(patientName);
     }
+
+    @GetMapping("/api/patient/chi-tiet-chi-dinh/{id}")
+    public BaseResponse getDataMedicalDetail(@PathVariable("id") int potId) {
+        String patientName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return paymentService.getDataMedicalDetail(patientName, potId);
+    }
+
 
 }

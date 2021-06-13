@@ -25,10 +25,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 @SpringBootApplication
 public class MedtechApplication {
@@ -113,4 +115,11 @@ public class MedtechApplication {
 
         return hashRSA;
     }
+
+    @PostConstruct
+    public void init(){
+        // Setting Spring Boot SetTimeZone
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    }
+
 }

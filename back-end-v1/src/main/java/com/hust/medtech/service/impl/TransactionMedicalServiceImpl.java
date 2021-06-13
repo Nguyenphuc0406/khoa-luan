@@ -32,10 +32,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.management.Notification;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -62,6 +59,8 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
     POTDetailRepository potDetailRepository;
     @Autowired
     JwtTokenProvider tokenProvider;
+    @Autowired
+    NotifyRepository mNotifyRepository;
 
     // danh cho BS dang ky chi muc
     @Transactional(rollbackOn = Exception.class)
@@ -75,11 +74,14 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
         if (!ofTreatment.isPresent()) {
             return new NotFoundResponse("Không tìm thấy thông tin giao dịch khám của bệnh nhân!");
         }
+
+        List<Notify> notifies = new ArrayList<>();
         Patient patient = ofTreatment.get().getPatientPot();
         TransactionMedical transactionMedical = TransactionMedical.builder()
                 .createDate(new Date())
                 .doctor(doctor)
-                .status(1)
+                .status(0)
+                .processOfTreatment(ofTreatment.get())
                 .patient(patient).build();
         List<TransactionMedicalDetail> details = new ArrayList<>();
         for (Integer i : transMedicalDTO.getItemOfDepts()) {
@@ -92,8 +94,21 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
                     TransactionMedicalDetailID(transactionMedical, item.get())));
         }
         transactionMedical.setTransactionMedicalDetails(
-                details
-        );
+
+        details);
+        medicalRepository.save(transactionMedical);
+        medicalDetailRepository.saveAll(transactionMedical.getTransactionMedicalDetails());
+        String currentToken = patient.getAccount().getDeviceToken();
+
+
+        notifies.add( Notify.builder()
+                .accountId(patient.getAccount().getAccountId())
+                .type(2)
+                .createDate(new Date())
+                .title("Thông báo từ MedTech")
+                .content("Bạn đã hoàn thành khám lâm sàng, vui lòng xem chi tiết chỉ địch của bác sĩ trong mục lịch khám")
+                .build());
+
         ProcessOfTreatmentDetailID kProcessOfTreatmentDetailID = new ProcessOfTreatmentDetailID();
         kProcessOfTreatmentDetailID.setDeptId(doctor.getDeptDoctor());
         kProcessOfTreatmentDetailID.setPotId(ofTreatment.get());
@@ -116,6 +131,13 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
         if(userNeedNotys != null && userNeedNotys.getContent() != null){
 
             for (ProcessOfTreatmentDetail p : userNeedNotys.getContent()){
+                notifies.add( Notify.builder()
+                        .accountId(p.getProcessDetailId().getPotId().getPatientPot().getAccount().getAccountId())
+                        .type(3)
+                        .createDate(new Date())
+                        .title("Thông báo từ MedTech")
+                        .content("Sắp đến lượt khám của bạn. vui long quay lại phòng khám.")
+                        .build());
                 String token;
                 try {
                     token =  p.getProcessDetailId().getPotId().getPatientPot().getAccount().getDeviceToken();
@@ -129,6 +151,31 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
 
             }
         }
+        if(currentToken !=  null){
+            List<String> tokenCurrent = new ArrayList<>();
+            tokenCurrent.add(currentToken);
+            FCMRequest request = new FCMRequest();
+            RestTemplate restTemplate = new RestTemplate();
+
+            request.registration_ids = tokenCurrent;
+            FCMRequest.Notification notification = new FCMRequest.Notification();
+            notification.title = "Thông báo từ MedTech";
+            notification.body = "Bạn đã hoàn thành khám lâm sàng, vui lòng xem chi tiết chỉ địch của bác sĩ trong mục lịch khám";
+            request.notification = notification;
+
+            HttpHeaders registrationHeaders = StringUtils.getHeaders();
+            registrationHeaders.set("Authorization", "key=AAAAmZOYw60:APA91bG8BYYUTKZ5ZKpU54sNTzR7MVx1Vp_cFgso-hVjfqBrl02MJ4yVDQZdMuJjHv6gXr3MDJAhC0jxF7xunCyegOL2WR0-lHrh_j9mGcVBn-z1ssk5ka25g90f8oZEgkKAGE2f3ZrA");
+            try {
+                HttpEntity<String> registrationEntity = new HttpEntity<String>(StringUtils.getBody(request),
+                        registrationHeaders);
+                ResponseEntity<String> response = restTemplate.exchange("https://fcm.googleapis.com/fcm/send",
+                        HttpMethod.POST, registrationEntity,
+                        String.class);
+
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
         if(!tokens.isEmpty()){
 //            notifies
             FCMRequest request = new FCMRequest();
@@ -136,8 +183,8 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
 
         request.registration_ids = tokens;
         FCMRequest.Notification notification = new FCMRequest.Notification();
-        notification.title = "test";
-        notification.body = "test";
+        notification.title = "Thông báo từ MedTech";
+        notification.body = "Sắp đến lượt khám của bạn. vui long quay lại phòng khám.";
         request.notification = notification;
 
         HttpHeaders registrationHeaders = StringUtils.getHeaders();
@@ -152,12 +199,11 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
-
-
-
         }
-        medicalRepository.save(transactionMedical);
+
+        if(!notifies.isEmpty()){
+            mNotifyRepository.saveAll(notifies);
+        }
 
 
         return new OkResponse(MsgRespone.TAO_PHIEU_KHAM_THANH_CONG);

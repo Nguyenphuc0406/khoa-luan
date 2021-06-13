@@ -6,6 +6,7 @@ import com.hust.medtech.base.response.NotFoundResponse;
 import com.hust.medtech.base.response.OkResponse;
 import com.hust.medtech.config.MsgRespone;
 import com.hust.medtech.data.dto.AccountDTO;
+import com.hust.medtech.data.dto.ItemOfDeptDTO;
 import com.hust.medtech.data.dto.PaymentDTO;
 import com.hust.medtech.data.entity.*;
 import com.hust.medtech.data.entity.response.DataPayment;
@@ -28,10 +29,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -52,45 +52,39 @@ public class PaymentServiceImpl implements PaymentService {
     JwtTokenProvider tokenProvider;
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    NotifyRepository mNotifyRepository;
 
     @Override
-    public BaseResponse getDataPayment(String token) {
+    public BaseResponse getDataMedicalDetail(String patientName, int potId) {
         // get data patient
-        String patientName = tokenProvider.getUserNameFromJWT(token);
         Account accountParent = accountRepository.findByUsername(patientName);
         Patient patient = patientRepository.findByAccount_AccountId(accountParent.getAccountId());
         // tim phieu kham tu BS  ung voi benh nhan va status =0 : chua thanh toan
-        TransactionMedical transactionMedical = tranMedRepository.findByPatientAndStatus(patient, 0);
-        try {
-            List<Integer> iodByPatient = transMedDetailRepository.getListIodByTransId(transactionMedical.getTransId());
-            if (iodByPatient != null) {
-                List<ItemOfDept> iodepts = new ArrayList<>();
-                int totalPrice = 0;
-                for (Integer i : iodByPatient) {
-                    ItemOfDept itemOfDept = iodRepository.findByIodId(i);
-                    if (itemOfDept != null) {
-                        iodepts.add(itemOfDept);
-                        totalPrice += itemOfDept.getPrice();
-                    } else {
-                        LOGGER.info("Khong tim thay IOD tuong ung voi patient");
-                    }
+//        TransactionMedical transactionMedical = tranMedRepository.findByPatientAndStatus(patient, 0);
+
+        List<Integer> iodByPatient = transMedDetailRepository.getListIodByTransId(potId);
+        if (iodByPatient != null ) {
+            List<ItemOfDeptDTO> iodepts = new ArrayList<>();
+
+            for (Integer i : iodByPatient) {
+                ItemOfDept itemOfDept = iodRepository.findByIodId(i);
+                ItemOfDeptDTO itemOfDeptDTO = ItemOfDeptDTO.builder()
+                        .consultingRoom(itemOfDept.getConsultingRoom())
+                        .name(itemOfDept.getName())
+                        .code(itemOfDept.getCode())
+                        .code(itemOfDept.getCode())
+                        .description(itemOfDept.getDescription()).build();
+                if (itemOfDept != null) {
+                    iodepts.add(itemOfDeptDTO);
+                } else {
+                    LOGGER.info("Khong tim thay IOD tuong ung voi patient");
                 }
-             /*   DataPayment dataPayment = DataPayment.builder()
-                        .transMedId(transactionMedical.getTransId())
-                        .namePatient(patientName)
-                        .itemOfDepts(iodepts)
-                        .totalPrice(totalPrice).build();*/
-
-
-                return new OkResponse(null);
-            } else {
-                return new NotFoundResponse(MsgRespone.DATA_PAYMENT_NOT_FOUNT);
             }
-        } catch (Exception e) {
-            LOGGER.error("Loi tim du lieu thanh toan: " + e);
+            return new OkResponse(iodepts);
+        } else {
+            return new NotFoundResponse("Khong tim thaydu lieu nguoi dung");
         }
-        return new BadResponse(MsgRespone.GLOBAL_DATA_NOT_FOUND);
-
     }
 
     @Transactional(rollbackOn = Exception.class)
@@ -112,13 +106,14 @@ public class PaymentServiceImpl implements PaymentService {
         if (!transactionMedical.isPresent()) {
             return new NotFoundResponse("Không tìm thấy thông tin giao dịch");
         }
+        String paymentCode = StringUtils.randomCode();
         LocalDateTime dateTime = LocalDateTime.now();
         Payment payment = new Payment();
         payment.setTotalPrice(request.getPrice());
         payment.setOutpatientCost(0);
         payment.setTransactionMedical(transactionMedical.get());
         payment.setPatientPay(accountCheck.getPatient());
-        payment.setPaymentCode(StringUtils.randomCode());
+        payment.setPaymentCode(paymentCode);
         payment.setPaymentTime(dateTime);
         String publicKey = "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtSkmOBp4OBfHuHBXBK717mF4sp0j6yrawuq0dvRlaeuOG/6rXazFxmrMWlRRuHJkQtsuC/yqgX7RZfOdzkgqomc/PeSTtz3pbjPkk93y+XTeiisvdZC4wNonGiossSUl8ZvksRBaLope18WCyBioEzNYpz7jjFFCEuzsH5GKjx9StOgMSxESQfxif0Y6RswPqWnx/ydkVEqLCbm37qhRKLjDp7ZWWJMKvq/Gy5VTE0i2afDHb7UPtnkRm3WF/aUsmJzZp83QWXWVVCcMuMzoahBoXFFNm+RSxioTC4+An2oMMn6lXHMtKUUPhMvoyzcPEkc3UnRORfKIbhTAfxipgeV8ZH2jR3WbP8dC6ucdGYlOYXTRM0pEjxPt8TSVX2V7QJgdiqlwxhZU3eZZ3a0ZhyXSId4y0oUS0xAgpJSyAmNKczTEap2jau19tfF71wHPSx/0AIG6l1LMoxN6H/wYjpN/e+GGILLdKkEoBiVVNljgOUpQkRlOzNmAQATHUbYgVcjFcSOr+Jc2zYwOEIe13PnOPof+oGUktR4Ozts86tZFHBFtEhkeeg4e9AihMoTRcmyqllXp6lYmpFb2kH8mB5ll95V12YmhCuEcNpsHeAWYfQsbEKuD52UALuem3ZfkoIlEjL1EXZz3NJZU/ML71LXoHiMmui3RzCL66xMu6FMCAwEAAQ==";
 
@@ -148,7 +143,19 @@ public class PaymentServiceImpl implements PaymentService {
                     storeId, storeName, publicKey, customerNumber, appData,
                     description, Parameter.VERSION, Parameter.APP_PAY_TYPE);
             if (appProcessResponse != null) {
+//                todo insert notify
                 mPaymentRepository.save(payment);
+
+                Notify notify = Notify.builder()
+                        .accountId(accountCheck.getAccountId())
+                        .type(1)
+                        .createDate(new Date())
+                        .title("Thông báo từ momo")
+                        .content("Bạn đã thanh toán thành công số tiền: " +
+                                ""+amount+" VND, ngày giao dịch: " +
+                                ""+payment.getPaymentTime().toString() +", với mã giao dich: "+paymentCode)
+                        .build();
+                mNotifyRepository.save(notify);
                 return new OkResponse("Giao dịch thành công!");
             } else {
                 return new NotFoundResponse("Giao dịch thất bại!");

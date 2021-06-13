@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,8 +35,10 @@ public class ProcessOfTreatment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "PATIENT_ID")
     private Patient patientPot;
+    @OneToMany(mappedBy = "processOfTreatment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TransactionMedical> transactionMedicals = new ArrayList<>();
 
-    @OneToMany(mappedBy = "processDetailId.potId",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "processDetailId.potId", fetch = FetchType.LAZY)
     private List<ProcessOfTreatmentDetail> processOfTreatmentDetails;
 
 }
