@@ -93,13 +93,14 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
             details.add(new TransactionMedicalDetail(new
                     TransactionMedicalDetailID(transactionMedical, item.get())));
         }
+        LOGGER.info("TAG 1");
         transactionMedical.setTransactionMedicalDetails(
 
         details);
-        medicalRepository.save(transactionMedical);
-        medicalDetailRepository.saveAll(transactionMedical.getTransactionMedicalDetails());
-        String currentToken = patient.getAccount().getDeviceToken();
+        LOGGER.info("TAG 2");
 
+        String currentToken = patient.getAccount().getDeviceToken();
+        LOGGER.info("TAG 4");
 
         notifies.add( Notify.builder()
                 .accountId(patient.getAccount().getAccountId())
@@ -108,13 +109,14 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
                 .title("Thông báo từ MedTech")
                 .content("Bạn đã hoàn thành khám lâm sàng, vui lòng xem chi tiết chỉ địch của bác sĩ trong mục lịch khám")
                 .build());
-
+        LOGGER.info("TAG 5");
         ProcessOfTreatmentDetailID kProcessOfTreatmentDetailID = new ProcessOfTreatmentDetailID();
         kProcessOfTreatmentDetailID.setDeptId(doctor.getDeptDoctor());
         kProcessOfTreatmentDetailID.setPotId(ofTreatment.get());
-
+        LOGGER.info("TAG 6");
         Optional<ProcessOfTreatmentDetail> processOfTreatmentDetail = potDetailRepository
                 .findById(kProcessOfTreatmentDetailID);
+        LOGGER.info("TAG 7");
         int currentIndexPot = -1;
         if(processOfTreatmentDetail.isPresent()){
             ProcessOfTreatmentDetail p = processOfTreatmentDetail.get();
@@ -122,12 +124,14 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
             currentIndexPot = p.getIndexNum();
 //            todo notify last 2 account
             potDetailRepository.save(p);
+            LOGGER.info("TAG 8");
         }
 //        them thu n thi notify thang n+1 va n+2;
         Pageable paging = PageRequest.of(0, 2);
         Page<ProcessOfTreatmentDetail>  userNeedNotys =  potDetailRepository._getAccountNotifyByPotId(currentIndexPot,doctor.getDeptDoctor().getDeptId()
         , ofTreatment.get().getPotId(),paging);
         List<String> tokens = new ArrayList<>();
+        LOGGER.info("TAG 9");
         if(userNeedNotys != null && userNeedNotys.getContent() != null){
 
             for (ProcessOfTreatmentDetail p : userNeedNotys.getContent()){
@@ -150,6 +154,7 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
 
 
             }
+            LOGGER.info("TAG 10");
         }
         if(currentToken !=  null){
             List<String> tokenCurrent = new ArrayList<>();
@@ -175,9 +180,11 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
+            LOGGER.info("TAG 11");
         }
         if(!tokens.isEmpty()){
 //            notifies
+            LOGGER.info("TAG 12");
             FCMRequest request = new FCMRequest();
         RestTemplate restTemplate = new RestTemplate();
 
@@ -199,13 +206,16 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
         }
 
         if(!notifies.isEmpty()){
+            LOGGER.info("TAG 13");
             mNotifyRepository.saveAll(notifies);
         }
-
-
+        LOGGER.info("TAG 13");
+        medicalRepository.save(transactionMedical);
+        medicalDetailRepository.saveAll(transactionMedical.getTransactionMedicalDetails());
         return new OkResponse(MsgRespone.TAO_PHIEU_KHAM_THANH_CONG);
     }
 

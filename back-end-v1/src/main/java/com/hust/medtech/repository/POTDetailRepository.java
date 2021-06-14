@@ -30,4 +30,6 @@ public interface POTDetailRepository extends JpaRepository<ProcessOfTreatmentDet
                                                             @Param("deptId")int deptId,   @Param("potCurrent") int potCurrent,
                                                             Pageable pageable);
 
+
+
 }
