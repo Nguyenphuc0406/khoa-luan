@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 
@@ -21,8 +22,10 @@ import com.hust.medtech.api.response.UserInfoResponse;
 import com.hust.medtech.base.BaseRecyclerview;
 import com.hust.medtech.base.CallBack;
 import com.hust.medtech.model.Notify;
+import com.hust.medtech.model.Role;
 import com.hust.medtech.model.UserInfo;
 import com.hust.medtech.screen.PaymentActivity;
+import com.hust.medtech.screen.doctormed.DoctorMedActivity;
 import com.hust.medtech.screen.notify.NotifyActivity;
 import com.hust.medtech.screen.requestmed.RequestMedTechActivity;
 import com.hust.medtech.screen.requestmed.fragment.RequestStep1Fragment;
@@ -47,6 +50,7 @@ import vn.momo.momo_partner.MoMoParameterNamePayment;
 public class HomePresenter {
     private Context mContext;
     public ObservableInt type;
+    public ObservableBoolean isDoctor;
     public ObservableField<String> username;
     public ObservableField<BaseRecyclerview<Notify>> mAdapter;
 
@@ -84,7 +88,15 @@ private  List<Notify> strings;
 
         type = new ObservableInt();
         strings = new ArrayList<>();
-        username = new ObservableField(DataUtils.getUserInfo(mContext).getFullName());
+        isDoctor= new ObservableBoolean();
+        UserInfo userInfo = DataUtils.getUserInfo(mContext);
+        if(Role.ROLE_ADMIN.equals(userInfo.getRole())){
+            isDoctor.set(true);
+            username = new ObservableField("Bác sĩ: "+DataUtils.getUserInfo(mContext).getFullName());
+        }else {
+            username = new ObservableField("Bệnh nhân: "+DataUtils.getUserInfo(mContext).getFullName());
+
+        }
         mAdapter = new ObservableField<>(new BaseRecyclerview<>(mContext,strings, R.layout.item_notify));
         mAdapter.get().setCallBack(new CallBack<Notify>() {
             @Override
@@ -114,6 +126,10 @@ private  List<Notify> strings;
 
         }else if( type == 3){
             mContext.startActivity(new Intent(mContext, TodoCustomerActivity.class));
+
+        }
+        else if( type == 4){
+            mContext.startActivity(new Intent(mContext, DoctorMedActivity.class));
 
         }
     }

@@ -61,6 +61,8 @@ public class Account {
 
     @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
     private Patient patient;
+    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
+    private Doctor doctor;
 
 
 }

@@ -12,4 +12,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#f8faff</color>
     <color name="red">#F11554</color>
+    <color name="green">#1AB834</color>
+    <color name="gray">#CCCFCC</color>
 </resources>

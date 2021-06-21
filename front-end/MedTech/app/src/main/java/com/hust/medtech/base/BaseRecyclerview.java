@@ -104,6 +104,7 @@ public class BaseRecyclerview<T> extends RecyclerView.Adapter<BaseRecyclerview.B
         public void bind(T mItem) {
             this.mItem = mItem;
             mBinding.setVariable(BR.item, mItem);
+            mBinding.setVariable(BR.index, getAdapterPosition());
             mBinding.setVariable(BR.viewHolder, this);
         }
 

@@ -165,7 +165,7 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
             request.registration_ids = tokenCurrent;
             FCMRequest.Notification notification = new FCMRequest.Notification();
             notification.title = "Thông báo từ MedTech";
-            notification.body = "Bạn đã hoàn thành khám lâm sàng, vui lòng xem chi tiết chỉ địch của bác sĩ trong mục lịch khám";
+            notification.body = "Bạn đã hoàn thành khám lâm sàng. Vui lòng xem chi tiết chỉ định của bác sĩ trong mục lịch khám!";
             request.notification = notification;
 
             HttpHeaders registrationHeaders = StringUtils.getHeaders();
@@ -176,7 +176,6 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
                 ResponseEntity<String> response = restTemplate.exchange("https://fcm.googleapis.com/fcm/send",
                         HttpMethod.POST, registrationEntity,
                         String.class);
-
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -191,7 +190,7 @@ public class TransactionMedicalServiceImpl implements TransactionMedicalService 
         request.registration_ids = tokens;
         FCMRequest.Notification notification = new FCMRequest.Notification();
         notification.title = "Thông báo từ MedTech";
-        notification.body = "Sắp đến lượt khám của bạn. vui long quay lại phòng khám.";
+        notification.body = "Sắp đến lượt khám của bạn. Vui lòng quay lại phòng khám!";
         request.notification = notification;
 
         HttpHeaders registrationHeaders = StringUtils.getHeaders();

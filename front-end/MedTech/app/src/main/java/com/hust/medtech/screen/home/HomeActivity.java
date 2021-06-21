@@ -15,6 +15,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.hust.medtech.R;
 import com.hust.medtech.base.BaseActivity;
 import com.hust.medtech.databinding.ActivityHomeBinding;
+import com.hust.medtech.screen.login.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,8 +61,8 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomePresente
         AHBottomNavigationItem item3 = new AHBottomNavigationItem("Thông báo",
                 R.drawable.ic_notifications);
 
-        AHBottomNavigationItem item4 = new AHBottomNavigationItem("Cài đặt",
-                R.drawable.ic_baseline_settings_24);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem("Đăng xuất",
+                R.drawable.ic_logout);
 
 // Add items
         bottomNavigation.addItem(item1);
@@ -88,7 +89,10 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomePresente
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public boolean onTabSelected(int p, boolean wasSelected) {
-
+                if(p == 3){
+                    startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                    finish();
+                }
 
                 return true;
             }

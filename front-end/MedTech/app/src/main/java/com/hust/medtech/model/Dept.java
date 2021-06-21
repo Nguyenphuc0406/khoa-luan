@@ -9,12 +9,39 @@ import com.google.gson.annotations.SerializedName;
 public class Dept extends BaseObservable {
     @SerializedName("deptId")
     private int id;
+    private int iodId;
     private String name;
+    private String consultingRoom;
+    private String description;
     private boolean isCheck;
 
     @Bindable
     public boolean isCheck() {
         return isCheck;
+    }
+
+    public int getIodId() {
+        return iodId;
+    }
+
+    public void setIodId(int iodId) {
+        this.iodId = iodId;
+    }
+
+    public String getConsultingRoom() {
+        return consultingRoom;
+    }
+
+    public void setConsultingRoom(String consultingRoom) {
+        this.consultingRoom = consultingRoom;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setCheck(boolean check) {

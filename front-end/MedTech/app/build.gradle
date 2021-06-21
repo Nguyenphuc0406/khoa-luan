@@ -7,6 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.hust.medtech"
         minSdkVersion 16
         targetSdkVersion 30
@@ -63,4 +64,5 @@ dependencies {
 
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
 }

@@ -4,9 +4,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -14,6 +16,13 @@ import com.hust.medtech.R;
 
 public class DialogNotify  extends Dialog {
     protected Context mContext;
+    private String title;
+
+    private CallBack callBack;
+
+    public void setCallBack(CallBack callBack) {
+        this.callBack = callBack;
+    }
 
     //    protected T mBinding;
     public enum OPTION {
@@ -24,12 +33,25 @@ public class DialogNotify  extends Dialog {
 
 
 
+    public DialogNotify(@NonNull Context context,String title) {
+        super(context);
+        this.mContext = context;
+        this.title = title;
+        this.type = OPTION.CENTER;
+    }
+    public DialogNotify(@NonNull Context context,String title,CallBack callBack) {
+        super(context);
+        this.mContext = context;
+        this.title = title;
+        this.type = OPTION.CENTER;
+        this.callBack = callBack;
+    }
     public DialogNotify(@NonNull Context context) {
         super(context);
         this.mContext = context;
+        this.title = title;
         this.type = OPTION.CENTER;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,10 +102,18 @@ public class DialogNotify  extends Dialog {
 
 
     protected  void initView(){
+        TextView tv = findViewById(R.id.message);
+        if(!TextUtils.isEmpty(title)){
+            tv.setText(title);
+        }
         findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((BaseActivity) mContext).finish();
+                if(callBack != null){
+                    callBack.onConfirm();
+                }else {
+                    ((BaseActivity) mContext).finish();
+                }
             }
         });
     }
@@ -91,6 +121,10 @@ public class DialogNotify  extends Dialog {
 
     protected  int idLayoutRes(){
         return R.layout.dilog_notify;
+    }
+
+    public interface CallBack{
+        void onConfirm();
     }
 
 

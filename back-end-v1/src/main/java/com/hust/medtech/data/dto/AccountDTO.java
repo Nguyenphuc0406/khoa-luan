@@ -59,7 +59,9 @@ public class AccountDTO {
         identityCard = accountDTO.getIdentityCard();
         role = accountDTO.getRole();
         code = accountDTO.getCode();
-        address = accountDTO.getPatient().getPermanentAddress();
+        if (accountDTO.getPatient() != null) {
+            address = accountDTO.getPatient().getPermanentAddress();
+        }
         gender = accountDTO.getGender();
     }
 }

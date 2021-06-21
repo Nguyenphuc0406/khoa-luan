@@ -66,7 +66,6 @@ public class PaymentServiceImpl implements PaymentService {
         List<Integer> iodByPatient = transMedDetailRepository.getListIodByTransId(potId);
         if (iodByPatient != null ) {
             List<ItemOfDeptDTO> iodepts = new ArrayList<>();
-
             for (Integer i : iodByPatient) {
                 ItemOfDept itemOfDept = iodRepository.findByIodId(i);
                 ItemOfDeptDTO itemOfDeptDTO = ItemOfDeptDTO.builder()

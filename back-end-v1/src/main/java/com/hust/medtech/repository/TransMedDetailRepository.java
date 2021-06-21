@@ -13,7 +13,7 @@ import java.util.List;
 public interface TransMedDetailRepository extends JpaRepository<TransactionMedicalDetail, Integer> {
     @Transactional
     @Modifying
-    @Query(value = "select t.transDetailId.itemOfDeptId.iodId from TransactionMedicalDetail t where t.transDetailId.transactionMedical.transId = ?1")
-    List<Integer> getListIodByTransId(int transactionId);
+    @Query(value = "select t.transDetailId.itemOfDeptId.iodId from TransactionMedicalDetail t where t.transDetailId.transactionMedical.processOfTreatment.potId = ?1")
+    List<Integer> getListIodByTransId(int potId);
 
 }

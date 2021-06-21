@@ -1,5 +1,6 @@
 package com.hust.medtech.repository;
 
+import com.hust.medtech.data.dto.PotDTO;
 import com.hust.medtech.data.entity.ProcessOfTreatmentDetail;
 import com.hust.medtech.data.entity.key.ProcessOfTreatmentDetailID;
 import org.springframework.data.domain.Page;
@@ -27,9 +28,14 @@ public interface POTDetailRepository extends JpaRepository<ProcessOfTreatmentDet
     @Query("select p from ProcessOfTreatmentDetail p where p.indexNum > :currentNum and p.processDetailId.deptId.deptId = :deptId " +
             " and p.processDetailId.potId.potId > :potCurrent and p.accStatus = 0 order by p.indexNum asc")
     Page<ProcessOfTreatmentDetail> _getAccountNotifyByPotId(@Param("currentNum") int currentNum,
-                                                            @Param("deptId")int deptId,   @Param("potCurrent") int potCurrent,
+                                                            @Param("deptId") int deptId, @Param("potCurrent") int potCurrent,
                                                             Pageable pageable);
 
-
+    @Query("select new com.hust.medtech.data.dto.PotDTO(p.potId,p.patientPot.account.fullName,p.patientPot.age," +
+            "p.description,pd.indexNum,pd.accStatus, p.patientPot.account.gender)  from ProcessOfTreatmentDetail pd inner join ProcessOfTreatment p" +
+            " on pd.processDetailId.potId.potId = p.potId where pd.processDetailId.deptId.deptId = ?1 " +
+            "and function('DATE',function('DATE_FORMAT',p.dateOfExamination,'%Y-%m-%d')) = function('CURDATE') " +
+            "order by p.dateOfExamination asc")
+    List<PotDTO> _getPostByDoctor(int deptId);
 
 }

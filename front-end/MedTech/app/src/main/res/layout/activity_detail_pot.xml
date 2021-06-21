@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="presenter"
+            type="com.hust.medtech.screen.doctormed.DetailMedActivity" />
+        <variable
+            name="item"
+            type="com.hust.medtech.model.Model" />
+        <import type="android.view.View"></import>
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:background="@color/background"
+        android:layout_height="match_parent">
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
+
+            app:leftIcon="@{@drawable/ic_back}"
+            app:leftIconClick="@{v -> presenter.onCancel()}"
+            app:title="@{@string/chi_dinh_kham}">
+
+        </include>
+
+        <LinearLayout
+            android:id="@+id/body"
+            android:layout_above="@+id/bottom"
+            android:layout_below="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/_10sdp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:background="@drawable/boder2"
+                    android:layout_width="0dp"
+                    android:padding="@dimen/_6sdp"
+                    android:orientation="vertical"
+                    android:layout_weight="2"
+
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="Tên BN:"
+                        android:textColor="@color/black1"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="@{item.patientName}"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:background="@drawable/boder2"
+                    android:layout_width="0dp"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    android:padding="@dimen/_6sdp"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="Tuổi:"
+                        android:textColor="@color/black1"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="@{item.patientAge}"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:background="@drawable/boder2"
+                    android:layout_width="0dp"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    android:padding="@dimen/_6sdp"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="Giới tính:"
+                        android:textColor="@color/black1"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="@{item.gender}"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+
+                </LinearLayout>
+            </LinearLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@drawable/line_dot"
+                android:layout_height="@dimen/_3sdp">
+
+            </ImageView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                app:adapter="@{presenter.mAdapter}"
+
+                android:layout_height="match_parent">
+
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_12sdp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button"
+                android:text="Gửi chỉ định"
+                android:onClick="@{v -> presenter.sendRequest()}"
+                android:textColor="@color/white"
+                android:visibility="@{presenter.isSelected ? View.VISIBLE : View.GONE}">
+
+            </androidx.appcompat.widget.AppCompatButton>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/gray"
+                android:background="@drawable/button"
+                android:enabled="false"
+                android:text="Gửi chỉ định"
+                android:textColor="@color/white"
+
+                android:visibility="@{!presenter.isSelected ? View.VISIBLE : View.GONE}">
+
+            </androidx.appcompat.widget.AppCompatButton>
+        </RelativeLayout>
+
+    </RelativeLayout>
+</layout>

@@ -13,6 +13,7 @@ import com.hust.medtech.api.MedTedInstance;
 import com.hust.medtech.api.request.LoginRequest;
 import com.hust.medtech.api.response.LoginResponse;
 import com.hust.medtech.api.response.UserInfoResponse;
+import com.hust.medtech.base.BaseView;
 import com.hust.medtech.screen.home.HomeActivity;
 
 import retrofit2.Call;
@@ -21,17 +22,19 @@ import retrofit2.Response;
 
 public class LoginPresenter {
     private Context mContext;
+    private BaseView view;
 
     public ObservableField<String> userName;
     public ObservableField<String> pass;
 
-    public LoginPresenter(Context mContext) {
+    public LoginPresenter(Context mContext,BaseView view) {
         this.mContext = mContext;
+        this.view = view;
         initData();
     }
 
     private void initData() {
-        userName = new ObservableField<>("ngoclinh");
+        userName = new ObservableField<>("hoanganh");
         pass = new ObservableField<>("123456");
     }
 
@@ -44,6 +47,7 @@ public class LoginPresenter {
             Toast.makeText(mContext, "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
             return;
         }
+        view.showLoading();
         LoginRequest request = new LoginRequest();
         request.setPassword(pass.get().trim());
         request.setUsername(userName.get().trim());
@@ -69,6 +73,7 @@ public class LoginPresenter {
                     @Override
                     public void onFailure(Call<LoginResponse> call, Throwable t) {
                         Toast.makeText(mContext, "Login fail", Toast.LENGTH_SHORT).show();
+                        view.hideLoading();
                     }
                 });
     }
@@ -79,13 +84,15 @@ public class LoginPresenter {
                     @Override
                     public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
                         if (response.code() == 200) {
-                            mContext.startActivity(new Intent(mContext, HomeActivity.class));
+
                             SharedPreferences sharedPreferences = mContext.getSharedPreferences("test", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("user", new Gson().toJson(response.body().getData()));
                             // Save.
                             editor.apply();
                             editor.commit();
+                            view.hideLoading();
+                            mContext.startActivity(new Intent(mContext, HomeActivity.class));
                         } else {
                             onFailure(null, null);
                         }
@@ -93,6 +100,7 @@ public class LoginPresenter {
                     @Override
                     public void onFailure(Call<UserInfoResponse> call, Throwable t) {
                         Toast.makeText(mContext, "Login fail", Toast.LENGTH_SHORT).show();
+                        view.hideLoading();
                     }
                 });
     }

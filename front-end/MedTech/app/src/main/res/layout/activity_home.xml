@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View"></import>
         <variable
             name="presenter"
             type="com.hust.medtech.screen.home.HomePresenter" />
@@ -59,6 +61,7 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="28dp"
+                    android:visibility="@{presenter.isDoctor ? View.VISIBLE : View.GONE}"
                     android:src="@mipmap/ic_doctor"
                     android:layout_marginRight="20dp"
                     android:layout_alignParentRight="true"
@@ -102,48 +105,79 @@
                     </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/menu"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_below="@+id/card"
-                    android:layout_centerInParent="true"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_width="wrap_content"
+
                     android:layout_height="wrap_content">
-                    <include
-                        layout="@layout/item_menu"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        app:icon="@{@drawable/icon_checklist}"
-                        app:onClick="@{v -> presenter.onChangeMenu(1)}"
-                        app:active="@{presenter.type == 1}"
-                        app:title="@{@string/menu_register}"
+                    <LinearLayout
+                        android:visibility="@{!presenter.isDoctor ? View.GONE : View.VISIBLE}"
+                        android:id="@+id/menu1"
+                        android:layout_centerInParent="true"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+                        <include
+                            layout="@layout/item_menu"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            app:icon="@{@drawable/icon_checklist}"
+                            app:onClick="@{v -> presenter.onChangeMenu(4)}"
+                            app:active="@{presenter.type == 4}"
+                            app:title="@{@string/menu_kham_benh}"
+                            android:layout_height="wrap_content">
 
-                    </include>
-                    <include
-                        layout="@layout/item_menu"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        app:active="@{presenter.type == 2}"
-                        app:icon="@{@drawable/payment}"
-                        app:onClick="@{v -> presenter.onChangeMenu(2)}"
-                        app:title="@{@string/menu_payment}"
+                        </include>
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:visibility="@{presenter.isDoctor ? View.GONE : View.VISIBLE}"
+                        android:id="@+id/menu"
+
+                        tools:visibility="gone"
+                        android:layout_centerInParent="true"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+                        <include
+                            layout="@layout/item_menu"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            app:icon="@{@drawable/icon_checklist}"
+                            app:onClick="@{v -> presenter.onChangeMenu(1)}"
+                            app:active="@{presenter.type == 1}"
+                            app:title="@{@string/menu_register}"
+                            android:layout_height="wrap_content">
 
-                    </include>
-                    <include
-                        layout="@layout/item_menu"
-                        android:layout_weight="1"
-                        app:active="@{presenter.type == 3}"
-                        android:layout_width="0dp"
-                        app:icon="@{@drawable/info}"
-                        app:onClick="@{v -> presenter.onChangeMenu(3)}"
-                        app:title="@{@string/menu_info}"
-                        android:layout_height="wrap_content">
+                        </include>
+                        <include
+                            layout="@layout/item_menu"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            app:active="@{presenter.type == 2}"
+                            app:icon="@{@drawable/payment}"
+                            app:onClick="@{v -> presenter.onChangeMenu(2)}"
+                            app:title="@{@string/menu_payment}"
+                            android:layout_height="wrap_content">
 
-                    </include>
-                </LinearLayout>
+                        </include>
+                        <include
+                            layout="@layout/item_menu"
+                            android:layout_weight="1"
+                            app:active="@{presenter.type == 3}"
+                            android:layout_width="0dp"
+                            app:icon="@{@drawable/info}"
+                            app:onClick="@{v -> presenter.onChangeMenu(3)}"
+                            app:title="@{@string/menu_info}"
+                            android:layout_height="wrap_content">
+
+                        </include>
+                    </LinearLayout>
+
+                </RelativeLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

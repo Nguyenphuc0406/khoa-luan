@@ -7,4 +7,6 @@ public interface POTService {
     BaseResponse addPOT(ProcessOfTreatmentDTO treatmentDTO, String token);
 
     BaseResponse getDataMedical(String patientName);
+
+    BaseResponse getPatientMedicalByDay(String doctorName);
 }

@@ -66,19 +66,19 @@ public class POTServiceImpl implements POTService {
             if (pageData != null && pageData.getContent() != null && !pageData.getContent().isEmpty()) {
                 process = pageData.getContent().get(0);
                 process.getProcessOfTreatmentDetails();
-                Map<String,String> mapDept = new HashMap<>();
-                for (ProcessOfTreatmentDetail processOfTreatmentDetail :  process.getProcessOfTreatmentDetails()){
-                    String key = processOfTreatmentDetail.getProcessDetailId().getDeptId().getDeptId()+"";
-                    mapDept.put(key,processOfTreatmentDetail.getProcessDetailId().getDeptId().getName());
+                Map<String, String> mapDept = new HashMap<>();
+                for (ProcessOfTreatmentDetail processOfTreatmentDetail : process.getProcessOfTreatmentDetails()) {
+                    String key = processOfTreatmentDetail.getProcessDetailId().getDeptId().getDeptId() + "";
+                    mapDept.put(key, processOfTreatmentDetail.getProcessDetailId().getDeptId().getName());
                 }
-                for(Integer i : treatmentDTO.getDepts()){
-                    if(mapDept.containsKey(i+"")){
-                        return new BadResponse("Bạn đã đăng kí "+mapDept.get(i+"")+" trong hôm nay. và không được đăng kí lại.");
+                for (Integer i : treatmentDTO.getDepts()) {
+                    if (mapDept.containsKey(i + "")) {
+                        return new BadResponse("Bạn đã đăng kí " + mapDept.get(i + "") + " trong hôm nay. và không được đăng kí lại.");
                     }
                 }
 
-            }else {
-                 process = ProcessOfTreatment.builder()
+            } else {
+                process = ProcessOfTreatment.builder()
                         .description(treatmentDTO.getDescription())
                         .dateOfExamination(new Date())
                         .code(StringUtils.randomCode())
@@ -101,7 +101,7 @@ public class POTServiceImpl implements POTService {
                 int indexNum = Integer.parseInt(count.get(0)[0].toString()) + 1;
 
                 details.add(new ProcessOfTreatmentDetail(new ProcessOfTreatmentDetailID(
-                        process, dp.get()), indexNum,0));
+                        process, dp.get()), indexNum, 0));
             }
             potDetailRepository.saveAll(details);
             LOGGER.info("Dang ky cac muc thanh cong");
@@ -174,5 +174,21 @@ public class POTServiceImpl implements POTService {
                     .build());
         }
         return new OkResponse(list);
+    }
+
+    @Override
+    public BaseResponse getPatientMedicalByDay(String doctorName) {
+        Account accountParent = accountRepository.findByUsername(doctorName);
+        if (accountParent == null || accountParent.getDoctor() == null) {
+            return new NotFoundResponse("Không tìm thấy thông tin bác sĩ!");
+        }
+        Doctor doctor = accountParent.getDoctor();
+        if (doctor.getDeptDoctor() == null || doctor.getDeptDoctor().getDeptId() < 1) {
+            return new NotFoundResponse("Bác sĩ không quản lý phòng khám nào.");
+        }
+        int depID = doctor.getDeptDoctor().getDeptId();
+
+
+        return new OkResponse(potDetailRepository._getPostByDoctor(depID));
     }
 }
