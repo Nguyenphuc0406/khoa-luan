@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface NotifyRepository extends JpaRepository<Notify, String> {
 
-    List<Notify> findNotifyByAccountIdOrderByCreateDateAsc(int accountId);
+    List<Notify> findNotifyByAccountIdOrderByCreateDateDesc(int accountId);
 }

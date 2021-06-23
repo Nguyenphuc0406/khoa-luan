@@ -29,5 +29,11 @@ public class PaymentController {
         return paymentService.payment(request, patientName);
     }
 
+    @GetMapping("/historyTransPay")
+    public BaseResponse historyTransPay() {
+        String patientName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return paymentService._getPayTrans( patientName);
+    }
+
 
 }

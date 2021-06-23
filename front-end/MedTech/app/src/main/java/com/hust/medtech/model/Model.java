@@ -26,7 +26,107 @@ public class Model {
     @Expose
     private String gender;
     @Expose
+    private String name;
+    @Expose
+    private String consultingRoom;
+    @Expose
+    private String content;
+    @Expose
+    private String title;
+    @Expose
+    private String paymentCode;
+    @Expose
+    private String paymentDate;
+    @Expose
     private int status;
+    @Expose
+    private int isDoctorAccepted;
+    @Expose
+    private int deptId;
+    @Expose
+    private int type;
+    @Expose
+    private int totalPrice;
+
+    public String getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(String paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
+    public String getPaymentCode() {
+        return paymentCode;
+    }
+
+    public void setPaymentCode(String paymentCode) {
+        this.paymentCode = paymentCode;
+    }
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getConsultingRoom() {
+        return consultingRoom;
+    }
+
+    public void setConsultingRoom(String consultingRoom) {
+        this.consultingRoom = consultingRoom;
+    }
+
+    public int getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(int deptId) {
+        this.deptId = deptId;
+    }
+
+    public int getIsDoctorAccepted() {
+        return isDoctorAccepted;
+    }
+
+    public void setIsDoctorAccepted(int isDoctorAccepted) {
+        this.isDoctorAccepted = isDoctorAccepted;
+    }
 
     public int getPotId() {
         return potId;

@@ -35,4 +35,13 @@ public abstract class BaseFragment<M extends ViewDataBinding,P> extends Fragment
 
     public abstract int layoutId();
     public abstract void initData();
+
+    public void showLoadingDialog() {
+        ((BaseActivity) getActivity()).showLoadingDialog();
+    }
+    public void hideLoading() {
+        ((BaseActivity) getActivity()).hideLoadingDialog();
+    }
+
+
 }

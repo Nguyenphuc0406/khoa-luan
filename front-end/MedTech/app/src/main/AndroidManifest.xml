@@ -25,9 +25,11 @@
         </activity>
         <activity android:name=".screen.notify.NotifyActivity">
 
-        </activity>  <activity android:name=".screen.requestmed.RequestMedTechActivity">
+        </activity>  <activity android:name=".screen.requestmed.RequestMedTechActivity"
+        android:windowSoftInputMode="stateVisible|adjustPan">
         </activity>  <activity android:name=".screen.PaymentActivity">
         </activity>  <activity android:name=".screen.todo.TodoCustomerActivity">
+        </activity>  <activity android:name=".screen.todo.ChiTietKhamActivity">
         </activity>  <activity android:name=".screen.doctormed.DoctorMedActivity">
         </activity>  <activity android:name=".screen.doctormed.DetailMedActivity">
 

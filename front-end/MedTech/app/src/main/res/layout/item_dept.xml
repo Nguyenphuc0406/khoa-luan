@@ -24,10 +24,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:onClick="@{v -> viewHolder.click()}"
@@ -44,21 +44,68 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:gravity="center|left"
-                    android:text="@{item.name}"
-                    android:textSize="14sp"
-                    android:textStyle="bold">
+                    android:orientation="vertical">
 
-                </androidx.appcompat.widget.AppCompatTextView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="STT: "
+                            android:textSize="@dimen/_10ssp"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content">
 
+                        </TextView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="@{String.valueOf(index+1)}"
+                            android:textColor="@color/black1"
+                            android:layout_marginLeft="@dimen/_2sdp"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content">
+
+                        </TextView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="Khoa: "
+                            android:textSize="@dimen/_10ssp"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content">
+
+                        </TextView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="@{item.name}"
+                            android:textColor="@color/black1"
+                            android:layout_marginLeft="@dimen/_2sdp"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content">
+
+                        </TextView>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/ic_baseline_check_circle_24">
+
+                </androidx.appcompat.widget.AppCompatImageView>
             </RelativeLayout>
+
 
 
         </LinearLayout>
@@ -75,16 +122,50 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:gravity="center|left"
-                    android:text="@{item.name}"
-                    android:textSize="14sp"
-                    android:textStyle="bold">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="STT: "
+                        android:textSize="@dimen/_10ssp"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content">
 
-                </androidx.appcompat.widget.AppCompatTextView>
+                    </TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="@{String.valueOf(index+1)}"
+                        android:textColor="@color/black1"
+                        android:layout_marginLeft="@dimen/_2sdp"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="Khoa: "
+                        android:textSize="@dimen/_10ssp"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="@{item.name}"
+                        android:textColor="@color/black1"
+                        android:layout_marginLeft="@dimen/_2sdp"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+                </LinearLayout>
+
 
             </LinearLayout>
 

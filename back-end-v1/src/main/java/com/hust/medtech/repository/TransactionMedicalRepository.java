@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
 
@@ -22,4 +23,6 @@ public interface TransactionMedicalRepository extends JpaRepository<TransactionM
 
     @Query("select t from TransactionMedical t where t.patient.account.username = ?1 and function('DATE',function('DATE_FORMAT',t.createDate,'%Y-%m-%d')) = function('CURDATE') order by t.createDate desc ")
     Page<TransactionMedical> _getTransByUserAnDate(String userName, Pageable pageable);
+
+
 }

@@ -16,5 +16,8 @@ public class PaymentDTO {
     private String paymentCode;
     private Integer patientId;
     private Integer transMedicalId;
+    private String paymentDate;
+    private String description;
+
 
 }

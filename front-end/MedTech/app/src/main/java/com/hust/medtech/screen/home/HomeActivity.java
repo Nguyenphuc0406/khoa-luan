@@ -1,6 +1,8 @@
 package com.hust.medtech.screen.home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +16,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.hust.medtech.R;
 import com.hust.medtech.base.BaseActivity;
+import com.hust.medtech.base.BaseView;
 import com.hust.medtech.databinding.ActivityHomeBinding;
 import com.hust.medtech.screen.login.LoginActivity;
 
@@ -29,7 +32,7 @@ import java.util.UUID;
 import vn.momo.momo_partner.AppMoMoLib;
 import vn.momo.momo_partner.MoMoParameterNamePayment;
 
-public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomePresenter> {
+public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomePresenter> implements BaseView {
 
     @Override
     public int layoutId() {
@@ -38,7 +41,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomePresente
 
     @Override
     public void initData() {
-        mPresenter = new HomePresenter(this);
+        mPresenter = new HomePresenter(this,this);
         mBinding.setPresenter(mPresenter);
         setupMenu();
         actionViewFlipper();
@@ -89,9 +92,28 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomePresente
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public boolean onTabSelected(int p, boolean wasSelected) {
+
                 if(p == 3){
+                    SharedPreferences sharedPreferences = HomeActivity.this.getSharedPreferences("test", Context.MODE_PRIVATE);
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.remove("token");
+                    editor.remove("user");
+                    editor.remove("deviceToken");
+                    // Save.
+                    editor.apply();
+                    editor.commit();
+
                     startActivity(new Intent(HomeActivity.this, LoginActivity.class));
                     finish();
+                }else {
+                    mPresenter.tab.set(p+1);
+                    if(p ==2){
+                        mPresenter.loadNotify();
+                    }else if(p ==1){
+                        mPresenter.loadTrans();
+                    }
+                    mPresenter.tab.notifyChange();
                 }
 
                 return true;
@@ -134,8 +156,15 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomePresente
         viewFlipper.setAnimation(animation_slide_out);
     }
 
+    @Override
+    public void showLoading() {
+        showLoadingDialog();
+    }
 
-
+    @Override
+    public void hideLoading() {
+        hideLoadingDialog();
+    }
 
 
     //example payment

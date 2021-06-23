@@ -6,6 +6,7 @@
     <color name="teal_200">#54c0f9</color>
     <color name="teal_700">#54c0f9</color>
     <color name="color_app">#54c0f9</color>
+    <color name="color_app2">#0B73AA</color>
     <color name="blue1">#97AEF4</color>
     <color name="black">#FF000000</color>
     <color name="black1">#222121</color>
@@ -13,5 +14,6 @@
     <color name="background">#f8faff</color>
     <color name="red">#F11554</color>
     <color name="green">#1AB834</color>
+    <color name="cam">#FF9800</color>
     <color name="gray">#CCCFCC</color>
 </resources>

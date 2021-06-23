@@ -34,7 +34,7 @@ public class LoginPresenter {
     }
 
     private void initData() {
-        userName = new ObservableField<>("hoanganh");
+        userName = new ObservableField<>("ngoclinh");
         pass = new ObservableField<>("123456");
     }
 

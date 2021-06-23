@@ -22,5 +22,9 @@ public class ResponseDataPOT {
     private int index;
     private int totalIndex;
     private int potId;
+    private int deptId;
+    private long createDate;
+    private  int isDoctorAccepted;
+
 
 }

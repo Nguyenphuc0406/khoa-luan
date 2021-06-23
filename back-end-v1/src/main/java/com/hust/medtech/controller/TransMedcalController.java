@@ -6,6 +6,7 @@ import com.hust.medtech.data.dto.TransactionMedicalDTO;
 import com.hust.medtech.service.PaymentService;
 import com.hust.medtech.service.TransactionMedicalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -29,10 +30,10 @@ public class TransMedcalController {
         return transMedService.getTotalPayment(patientName);
     }
 
-    @GetMapping("/api/patient/chi-tiet-chi-dinh/{id}")
-    public BaseResponse getDataMedicalDetail(@PathVariable("id") int potId) {
+    @GetMapping("/api/patient/chi-tiet-chi-dinh")
+    public BaseResponse getDataMedicalDetail(@Param("potId") int potId,@Param("deptId") int deptId) {
         String patientName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return paymentService.getDataMedicalDetail(patientName, potId);
+        return paymentService.getDataMedicalDetail(patientName, potId,deptId);
     }
 
 

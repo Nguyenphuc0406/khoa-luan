@@ -92,19 +92,6 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
         Log.d("REQUEST_ID", string);
         eventValue.put(MoMoParameterNamePayment.PARTNER_CODE, "MOMOLB5S20210516");
 
-//        JSONObject objExtraData = new JSONObject();
-//        try {
-//            objExtraData.put("site_code", "008");
-//            objExtraData.put("site_name", "CGV Cresent Mall");
-//            objExtraData.put("screen_code", 0);
-//            objExtraData.put("screen_name", "Special");
-//            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3");
-//            objExtraData.put("movie_format", "2D");
-//            objExtraData.put("ticket", "{\"ticket\":{\"01\":{\"type\":\"std\",\"price\":110000,\"qty\":3}}}");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        eventValue.put(MoMoParameterNamePayment.EXTRA_DATA, objExtraData.toString());
         eventValue.put(MoMoParameterNamePayment.REQUEST_TYPE, "payment");
         eventValue.put(MoMoParameterNamePayment.LANGUAGE, "vi");
         eventValue.put(MoMoParameterNamePayment.EXTRA, "");
@@ -173,7 +160,7 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
 
                     if (data.getStringExtra("data") != null && !data.getStringExtra("data").equals("")) {
                         // TODO:
-                        Toast.makeText(this, "" + data.getStringExtra("data"), Toast.LENGTH_SHORT).show();
+
                         Log.d("TOKEN", data.getStringExtra("data"));
 
                         payment(data.getStringExtra("data"), data.getStringExtra("phonenumber"));

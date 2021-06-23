@@ -6,7 +6,12 @@
     <string name="menu_info">Lịch trình khám</string>
     <string name="menu_request_med">Tạo yêu cầu khám bệnh</string>
     <string name="menu_kham_benh">Khám bệnh</string>
+    <string name="thong_bao">Thông báo</string>
+    <string name="lich_su_giao_dich">Lịch sử giao dịch</string>
     <string name="da_kham">Đã Khám</string>
     <string name="chua_kham">Chưa Khám</string>
     <string name="chi_dinh_kham">Chỉ định khám</string>
+    <string name="bs_chua_kham">BS chưa khám</string>
+    <string name="bs_chi_dinh_kham">BS đã khám</string>
+    <string name="chi_tiet">Chi tiết chỉ định</string>
 </resources>

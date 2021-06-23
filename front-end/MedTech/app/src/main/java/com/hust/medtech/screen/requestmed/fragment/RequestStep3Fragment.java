@@ -1,7 +1,5 @@
 package com.hust.medtech.screen.requestmed.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -12,15 +10,12 @@ import com.hust.medtech.api.MedTedInstance;
 import com.hust.medtech.api.request.RegisterMedRequest;
 import com.hust.medtech.api.response.EmptyResponse;
 import com.hust.medtech.api.response.GetDeptResponse;
-import com.hust.medtech.api.response.GetNewsResponse;
 import com.hust.medtech.base.BaseFragment;
 import com.hust.medtech.base.BaseRecyclerview;
 import com.hust.medtech.base.CallBack;
 import com.hust.medtech.base.DialogNotify;
-import com.hust.medtech.databinding.FragmentRequestStep2Binding;
 import com.hust.medtech.databinding.FragmentRequestStep3Binding;
 import com.hust.medtech.model.Dept;
-import com.hust.medtech.model.Notify;
 import com.hust.medtech.utils.DataUtils;
 
 import java.util.ArrayList;
@@ -67,6 +62,7 @@ public class RequestStep3Fragment extends BaseFragment<FragmentRequestStep3Bindi
         });
     }
     private void getDept(String token){
+        showLoadingDialog();
         MedTedInstance.getInstance().getDept(token)
                 .enqueue(new Callback<GetDeptResponse>() {
                     @Override
@@ -74,6 +70,7 @@ public class RequestStep3Fragment extends BaseFragment<FragmentRequestStep3Bindi
                         if (response.code() == 200) {
                             data.addAll(response.body().getData());
                             mAdapter.notifyChange();
+                            hideLoading();
                         } else {
                             Toast.makeText(getContext(), "Fail ", Toast.LENGTH_SHORT).show();
                         }
@@ -81,6 +78,7 @@ public class RequestStep3Fragment extends BaseFragment<FragmentRequestStep3Bindi
 
                     @Override
                     public void onFailure(Call<GetDeptResponse> call, Throwable t) {
+                        hideLoading();
                         Toast.makeText(getContext(), "Fail "+t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -102,7 +100,7 @@ public class RequestStep3Fragment extends BaseFragment<FragmentRequestStep3Bindi
             Toast.makeText(getContext(), "Vui lòng chọn khoa cần khám!", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        showLoadingDialog();
         RegisterMedRequest registerMedRequest = new RegisterMedRequest();
         registerMedRequest.setDepts(id);
         registerMedRequest.setDescription(des.get());
@@ -111,6 +109,7 @@ public class RequestStep3Fragment extends BaseFragment<FragmentRequestStep3Bindi
                     @Override
                     public void onResponse(Call<EmptyResponse> call, Response<EmptyResponse> response) {
                         if (response.code() == 200) {
+                            hideLoading();
                             new DialogNotify(getContext()).show();
                         } else {
                             onFailure(null, null);
@@ -119,7 +118,7 @@ public class RequestStep3Fragment extends BaseFragment<FragmentRequestStep3Bindi
 
                     @Override
                     public void onFailure(Call<EmptyResponse> call, Throwable t) {
-
+                        hideLoading();
                     }
                 });
     }

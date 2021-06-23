@@ -56,34 +56,35 @@ public class PaymentServiceImpl implements PaymentService {
     NotifyRepository mNotifyRepository;
 
     @Override
-    public BaseResponse getDataMedicalDetail(String patientName, int potId) {
+    public BaseResponse getDataMedicalDetail(String patientName, int potId, int deptId) {
         // get data patient
         Account accountParent = accountRepository.findByUsername(patientName);
-        Patient patient = patientRepository.findByAccount_AccountId(accountParent.getAccountId());
+        if (accountParent == null || accountParent.getPatient() == null) {
+            return new NotFoundResponse("Không tìm thấy thông tin bệnh nhân");
+        }
+
         // tim phieu kham tu BS  ung voi benh nhan va status =0 : chua thanh toan
 //        TransactionMedical transactionMedical = tranMedRepository.findByPatientAndStatus(patient, 0);
 
-        List<Integer> iodByPatient = transMedDetailRepository.getListIodByTransId(potId);
-        if (iodByPatient != null ) {
-            List<ItemOfDeptDTO> iodepts = new ArrayList<>();
-            for (Integer i : iodByPatient) {
-                ItemOfDept itemOfDept = iodRepository.findByIodId(i);
-                ItemOfDeptDTO itemOfDeptDTO = ItemOfDeptDTO.builder()
-                        .consultingRoom(itemOfDept.getConsultingRoom())
-                        .name(itemOfDept.getName())
-                        .code(itemOfDept.getCode())
-                        .code(itemOfDept.getCode())
-                        .description(itemOfDept.getDescription()).build();
-                if (itemOfDept != null) {
-                    iodepts.add(itemOfDeptDTO);
-                } else {
-                    LOGGER.info("Khong tim thay IOD tuong ung voi patient");
-                }
-            }
-            return new OkResponse(iodepts);
-        } else {
-            return new NotFoundResponse("Khong tim thaydu lieu nguoi dung");
+        List<TransactionMedicalDetail> transactionMedicalDetails = transMedDetailRepository._getTransByPotIdAndDeptID(
+                potId, deptId, accountParent.getPatient().getPatientId()
+        );
+        if (transactionMedicalDetails == null || transactionMedicalDetails.isEmpty()) {
+            return new NotFoundResponse("Không tìm thấy thông tin chỉ định với giao dich trên");
         }
+        List<ItemOfDeptDTO> iodepts = new ArrayList<>();
+        transactionMedicalDetails.forEach(transactionMedicalDetail -> {
+            ItemOfDept itemOfDept = transactionMedicalDetail.getTransDetailId().getItemOfDeptId();
+            ItemOfDeptDTO itemOfDeptDTO = ItemOfDeptDTO.builder()
+                    .consultingRoom(itemOfDept.getConsultingRoom())
+                    .name(itemOfDept.getName())
+                    .code(itemOfDept.getCode())
+                    .description(itemOfDept.getDescription()).build();
+            iodepts.add(itemOfDeptDTO);
+        });
+
+        return new OkResponse(iodepts);
+
     }
 
     @Transactional(rollbackOn = Exception.class)
@@ -114,6 +115,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setPatientPay(accountCheck.getPatient());
         payment.setPaymentCode(paymentCode);
         payment.setPaymentTime(dateTime);
+
         String publicKey = "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtSkmOBp4OBfHuHBXBK717mF4sp0j6yrawuq0dvRlaeuOG/6rXazFxmrMWlRRuHJkQtsuC/yqgX7RZfOdzkgqomc/PeSTtz3pbjPkk93y+XTeiisvdZC4wNonGiossSUl8ZvksRBaLope18WCyBioEzNYpz7jjFFCEuzsH5GKjx9StOgMSxESQfxif0Y6RswPqWnx/ydkVEqLCbm37qhRKLjDp7ZWWJMKvq/Gy5VTE0i2afDHb7UPtnkRm3WF/aUsmJzZp83QWXWVVCcMuMzoahBoXFFNm+RSxioTC4+An2oMMn6lXHMtKUUPhMvoyzcPEkc3UnRORfKIbhTAfxipgeV8ZH2jR3WbP8dC6ucdGYlOYXTRM0pEjxPt8TSVX2V7QJgdiqlwxhZU3eZZ3a0ZhyXSId4y0oUS0xAgpJSyAmNKczTEap2jau19tfF71wHPSx/0AIG6l1LMoxN6H/wYjpN/e+GGILLdKkEoBiVVNljgOUpQkRlOzNmAQATHUbYgVcjFcSOr+Jc2zYwOEIe13PnOPof+oGUktR4Ozts86tZFHBFtEhkeeg4e9AihMoTRcmyqllXp6lYmpFb2kH8mB5ll95V12YmhCuEcNpsHeAWYfQsbEKuD52UALuem3ZfkoIlEjL1EXZz3NJZU/ML71LXoHiMmui3RzCL66xMu6FMCAwEAAQ==";
 
         /* accessKey - key cấp quyền truy cập vào server momo
@@ -128,6 +130,10 @@ public class PaymentServiceImpl implements PaymentService {
                 Environment.ProcessType.APP_IN_APP);
         e.setPartnerInfo(devInfo);
         long amount = request.getPrice();
+        payment.setDescription("Bạn đã thanh toán thành công số tiền: " +
+                "" + amount + " VND, ngày giao dịch: " +
+                "" + payment.getPaymentTime().toString() + ", với mã giao dich: " + paymentCode);
+
         String partnerRefId = String.valueOf(System.currentTimeMillis());
         String partnerTransId = "1561046083186";
         String customerNumber = request.getPhoneNumber();
@@ -150,9 +156,7 @@ public class PaymentServiceImpl implements PaymentService {
                         .type(1)
                         .createDate(new Date())
                         .title("Thông báo từ momo")
-                        .content("Bạn đã thanh toán thành công số tiền: " +
-                                ""+amount+" VND, ngày giao dịch: " +
-                                ""+payment.getPaymentTime().toString() +", với mã giao dich: "+paymentCode)
+                        .content(payment.getDescription())
                         .build();
                 mNotifyRepository.save(notify);
                 return new OkResponse("Giao dịch thành công!");
@@ -219,5 +223,27 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
 
+    }
+
+    @Override
+    public BaseResponse _getPayTrans(String username) {
+        Account accountCheck = accountRepository.findByUsername(username);
+        if (accountCheck == null || accountCheck.getPatient() == null) {
+            return new NotFoundResponse("Không tìm thấy thông tin của bạn!");
+        }
+        List<Payment> list = mPaymentRepository._getPayTrans(accountCheck.getPatient().getPatientId());
+        List<PaymentDTO> res = new ArrayList<>();
+        if(list != null && !list.isEmpty()){
+            list.forEach(payment -> {
+                res.add(PaymentDTO.builder()
+                        .outpatientCost(payment.getOutpatientCost())
+                        .paymentDate(payment.getPaymentTime().toString())
+                        .totalPrice(payment.getTotalPrice())
+                        .description(payment.getDescription())
+                        .paymentCode(payment.getPaymentCode())
+                        .build());
+            });
+        }
+        return new OkResponse(res);
     }
 }

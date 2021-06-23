@@ -21,6 +21,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface MedTedAPI {
     @POST("/login")
@@ -54,6 +55,18 @@ public interface MedTedAPI {
     Call<EmptyResponse> payment(@Body PaymentRequest request, @Header("Authorization") String token);
 
     @POST("/api/doctor/chi-dinh-kham")
+
     Call<EmptyResponse> requestPot(@Body PotRequest request, @Header("Authorization") String token);
+    @POST("/device")
+    Call<EmptyResponse> device(@Body LoginRequest request, @Header("Authorization") String token);
+
+    @GET("/api/patient/chi-tiet-chi-dinh")
+    Call<BaseResponse<List<Model>>> getDetailPot(@Query("potId") int potId, @Query("deptId") int deptId, @Header("Authorization") String token);
+
+    @GET("/notify")
+    Call<BaseResponse<List<Model>>> notify( @Header("Authorization") String token);
+    @GET("/historyTransPay")
+    Call<BaseResponse<List<Model>>> historyTransPay( @Header("Authorization") String token);
+
 
 }

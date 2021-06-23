@@ -53,7 +53,7 @@ public class AccountServiceImpl implements UserDetailsService, AccountService {
     @Override
     public BaseResponse getNotifyByAccount(String accountName) {
         Account accountCheck = accountRepository.findByUsername(accountName);
-        List<Notify> list = mNotifyRepository.findNotifyByAccountIdOrderByCreateDateAsc
+        List<Notify> list = mNotifyRepository.findNotifyByAccountIdOrderByCreateDateDesc
                 (accountCheck.getAccountId());
         return new OkResponse(list);
     }
